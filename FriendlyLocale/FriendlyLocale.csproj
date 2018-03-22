@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B89A061D-08BD-455D-A75F-F00C385091AC}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <UseMSBuildEngine>true</UseMSBuildEngine>
+    <OutputType>Library</OutputType>
+    <RootNamespace>FriendlyLocale</RootNamespace>
+    <AssemblyName>FriendlyLocale</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Parser\ParseException.cs" />
+    <Compile Include="Parser\Scanner.cs" />
+    <Compile Include="Parser\Token.cs" />
+    <Compile Include="Parser\Tokenizer.cs" />
+    <Compile Include="Parser\TokenKind.cs" />
+    <Compile Include="Parser\YAlias.cs" />
+    <Compile Include="Parser\YAnchor.cs" />
+    <Compile Include="Parser\YCollection.cs" />
+    <Compile Include="Parser\YDocument.cs" />
+    <Compile Include="Parser\YKeyValuePair.cs" />
+    <Compile Include="Parser\YMapping.cs" />
+    <Compile Include="Parser\YNode.cs" />
+    <Compile Include="Parser\YNodeStyle.cs" />
+    <Compile Include="Parser\YParser.cs" />
+    <Compile Include="Parser\YScalar.cs" />
+    <Compile Include="Parser\YSequence.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>
