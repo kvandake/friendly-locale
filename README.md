@@ -9,7 +9,7 @@ Features:
 - Support assets resources;
 - Support embedded resources.
 
-![screen-1](docs/screen-1.png) ![screen-2](docs/screen-2.png) ![screen-3](docs/screen-3.png) ![screen-4](docs/screen-4.png)
+![screen](docs/screen.png)
 
 ## Localization file syntax
 More inforamtion on http://www.yaml.org/spec/1.2/spec.html.
