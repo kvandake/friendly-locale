@@ -19,8 +19,8 @@
             {
                 Locales =
                 {
-                    {"ru", "https://nofile.io/g/2MQvPCOsAfTRc2ktw7vwi8lqVB6jeQqncYHDCc0piPC6mQ31RogkNGzHxgeTrWNF/ru.yaml/"},
-                    {"en", "https://nofile.io/g/NXa51XbbY3q54Mv3WUie9Ei0dMmKzSrMWYUmsbTPdiL4m1idnBMBGyGbl1I0BHvu/en.yaml/"}
+                    {"ru", "https://raw.githubusercontent.com/kvandake/friendly-locale/master/FriendlyLocale.Sample/FriendlyLocale.Sample.Core/Locales/ru.yaml"},
+                    {"en", "https://raw.githubusercontent.com/kvandake/friendly-locale/master/FriendlyLocale.Sample/FriendlyLocale.Sample.Core/Locales/en.yaml"}
                 }
             };
 
