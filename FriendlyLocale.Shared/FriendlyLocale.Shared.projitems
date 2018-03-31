@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{4113F58B-1423-4509-9C96-BD7A009A36C1}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>FriendlyLocale.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)I18N.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformCacheFileManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformComponentsFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformHttpClientManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PlatformResourceFileManager.cs" />
+  </ItemGroup>
+</Project>

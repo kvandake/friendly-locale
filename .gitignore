@@ -364,5 +364,9 @@ __pycache__/
 # By default, sensitive information, such as encrypted password
 # should be stored in the .pubxml.user file.
 
+*.DotSettings.user
+*.DotSettings
+!FriendlyLocale.DotSettings
+
 
 # End of https://www.gitignore.io/api/visualstudio,jetbrains+iml,xamarinstudio

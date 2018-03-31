@@ -12,7 +12,7 @@
         public string Name { get; }
 
         public YAnchor Anchor { get; }
-       
+
 
         internal new static YNode Parse(Tokenizer tokenizer)
         {

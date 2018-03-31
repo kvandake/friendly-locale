@@ -5,13 +5,13 @@
 
     public class YParser
     {
-        private IDictionary<string, string> map { get; }
-
         public YParser(YParserConfig config, params string[] contents)
         {
             this.Config = config ?? new YParserConfig();
             this.map = this.ParseContent(contents);
         }
+
+        private IDictionary<string, string> map { get; }
 
         public YParserConfig Config { get; }
 

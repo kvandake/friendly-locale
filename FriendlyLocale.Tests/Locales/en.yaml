@@ -1,0 +1,5 @@
+ViewModel:
+  Title: "En TitleValue"
+  Locale: "en"
+  Buttons:
+    SubmitButton: "En SubmitButtonValue"

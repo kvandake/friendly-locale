@@ -4,13 +4,12 @@
 
     internal abstract class YNode
     {
-        public YNodeStyle Style { get; }
-        
-
         protected YNode(YNodeStyle style)
         {
             this.Style = style;
         }
+
+        public YNodeStyle Style { get; }
 
         public static IEnumerable<YNode> Parse(string content)
         {
@@ -40,7 +39,7 @@
         public override string ToString()
         {
             return this.ToString(this.Style);
-        } 
+        }
 
         public abstract string ToString(YNodeStyle style);
 

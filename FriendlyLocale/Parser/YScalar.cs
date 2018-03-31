@@ -8,7 +8,7 @@
     {
         private static readonly Regex unicodeEscape =
             new Regex(@"\\(?:x(?<num>[0-9A-Fa-f]{2})|u(?<num>[0-9A-Fa-f]{4})|U(?<num>[0-9A-Fa-f]{8}))");
- 
+
         public YScalar(YNodeStyle style = YNodeStyle.Flow)
             : base(style)
         {

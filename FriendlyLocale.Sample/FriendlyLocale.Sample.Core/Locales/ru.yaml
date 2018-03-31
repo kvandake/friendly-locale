@@ -1,0 +1,15 @@
+alias: &ALIAS
+  AliasDescription: |
+    AliasDescription: Есть много вариантов Lorem Ipsum, но большинство из них имеет не всегда приемлемые модификации, например, 
+    юмористические вставки или слова, которые даже отдалённо не напоминают латынь.
+
+ContentDetailsViewModel:
+  Title: "Title: Russian"
+  TitleLocale: "TitleLocale: Current Locale: Ru"
+  SingleDescription: "SingleDescription: Lorem Ipsum является стандартной рыбой для текстов на латинице с начала XVI века."
+  MultiDescription: |
+    MultiDescription: Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. 
+    Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века.
+    В то время некий безымянный печатник создал большую коллекцию размеров и форм шрифтов, используя
+  ButtonTitle: "ButtonTitle: Продолжить"
+  <<: *ALIAS

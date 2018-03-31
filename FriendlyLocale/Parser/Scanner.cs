@@ -26,6 +26,11 @@
         public int CurrentIndent => this.indents.Any() ? this.indents.Peek() : -1;
         public bool MaybeSimpleKey { get; set; } = true;
 
+        public void Dispose()
+        {
+            this.Content = null;
+        }
+
         public int GetColumn(int index)
         {
             var lineStart = index > 0 ? this.Content.LastIndexOfAny(new[] {'\r', '\n'}, index - 1) : -1;
@@ -247,11 +252,6 @@
             var currentLine = this.Content.Substring(lineStart, lineEnd - lineStart);
 
             return $"[{this.Line + 1:00}, {this.Column + 1:00}] {currentLine}";
-        }
-
-        public void Dispose()
-        {
-            this.Content = null;
         }
     }
 }

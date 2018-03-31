@@ -1,0 +1,8 @@
+language: csharp
+solution: FriendlyLocale.sln
+install:
+  - nuget restore FriendlyLocale.sln
+  - nuget install NUnit.Runners -Version 3.8.0 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Debug FriendlyLocale.sln
+  - mono ./testrunner/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./FriendlyLocale.Tests/bin/Debug/FriendlyLocale.Tests.dll

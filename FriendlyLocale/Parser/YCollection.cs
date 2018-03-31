@@ -7,7 +7,7 @@
     internal abstract class YCollection<TModel> : YNode, IEnumerable<YNode>
     {
         private List<TModel> children;
-        
+
         public YCollection(YNodeStyle style, params YNode[] content)
             : base(style)
         {
@@ -43,7 +43,7 @@
                 }
             }
         }
-        
+
         protected internal abstract YNode GetPreviousNode(YNode node);
         protected internal abstract YNode GetNextNode(YNode node);
         public abstract void Add(params YNode[] content);
@@ -56,7 +56,7 @@
             this.RemoveNodes();
             this.Add(content);
         }
-        
+
         private void Initialize(params YNode[] content)
         {
             this.Add(content);

@@ -8,11 +8,8 @@
 
     internal class Tokenizer : IEnumerable<Token>, IDisposable
     {
-        private LinkedListNode<Token> currentNode;
-
         private IDictionary<string, YAnchor> anchors;
-
-        internal IDictionary<string, YAnchor> Anchors => this.anchors ?? (this.anchors = new Dictionary<string, YAnchor>());
+        private LinkedListNode<Token> currentNode;
 
         public Tokenizer(Scanner scanner)
         {
@@ -21,11 +18,18 @@
             this.currentNode = this.Tokens.First;
         }
 
+        internal IDictionary<string, YAnchor> Anchors => this.anchors ?? (this.anchors = new Dictionary<string, YAnchor>());
+
         public Scanner Scanner { get; }
         public LinkedList<Token> Tokens { get; private set; }
         public Token Current => this.currentNode.Value;
         public LinkedListNode<Token> Previous => this.currentNode.Previous;
         public LinkedListNode<Token> Next => this.currentNode.Next;
+
+        public void Dispose()
+        {
+            this.Tokens = null;
+        }
 
         public IEnumerator<Token> GetEnumerator()
         {
@@ -271,10 +275,10 @@
                         throw ParseException.UnexpectedToken(scanner, "identifier");
                     }
 
-//                    if (!scanner.IsWhiteSpaceOrEof() && "]}?:,%@`".IndexOf(scanner.Current) == -1)
-//                    {
-//                        throw ParseException.UnexpectedToken(scanner, ' ');
-//                    }
+                    //                    if (!scanner.IsWhiteSpaceOrEof() && "]}?:,%@`".IndexOf(scanner.Current) == -1)
+                    //                    {
+                    //                        throw ParseException.UnexpectedToken(scanner, ' ');
+                    //                    }
 
                     scanner.MaybeSimpleKey = kind == '*';
                     tokens.Add(new Token(scanner, kind == '*' ? TokenKind.Alias : TokenKind.Anchor, value, begin, scanner.Index - begin));
@@ -318,7 +322,7 @@
                             break;
                         }
 
-                        if(appendNewLine)
+                        if (appendNewLine)
                         {
                             sb.Append(Environment.NewLine);
                             appendNewLine = false;
@@ -531,11 +535,6 @@
             scanner.ReadUntilLineBreakOrEof();
 
             return true;
-        }
-
-        public void Dispose()
-        {
-            this.Tokens = null;
         }
     }
 }

@@ -140,7 +140,7 @@
                     ? $"{{ {string.Join(", ", this.Select(i => i.ToYamlString(style)))} }}"
                     : "{}";
         }
-        
+
         private class YKeyValueList : List<YNode>
         {
             public void Add(YKeyValuePair item)

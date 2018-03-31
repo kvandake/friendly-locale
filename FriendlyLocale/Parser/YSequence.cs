@@ -9,7 +9,7 @@
             : base(style, content)
         {
         }
-        
+
         protected override YNode FirstNode => this.Children.FirstOrDefault();
         protected override YNode LastNode => this.Children.LastOrDefault();
 

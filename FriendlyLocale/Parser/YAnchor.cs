@@ -5,12 +5,12 @@
     internal class YAnchor : YNode
     {
         // https://gist.github.com/bowsersenior/979804
-        private YAnchor(YNode value) 
+        private YAnchor(YNode value)
             : base(YNodeStyle.Block)
         {
             this.Value = value;
         }
-        
+
         public YNode Value { get; }
 
         public IEnumerable<YNode> ValueChildren

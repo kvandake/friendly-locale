@@ -11,7 +11,7 @@
 
         public YNode Key { get; }
         public YNode Value { get; }
-        
+
         internal new static YKeyValuePair Parse(Tokenizer tokenizer)
         {
             switch (tokenizer.Current.Kind)
@@ -51,7 +51,7 @@
                     {
                         return null;
                     }
-                    
+
                     var value = YNode.Parse(tokenizer);
 
                     return new YKeyValuePair(key, value);
@@ -69,7 +69,8 @@
         public override string ToYamlString(YNodeStyle style)
         {
             return style == YNodeStyle.Block
-                ? this.Key.ToYamlString(YNodeStyle.Flow) + ": " + (this.Value.Style == YNodeStyle.Block && this.Value is YCollection<YKeyValuePair>
+                ? this.Key.ToYamlString(YNodeStyle.Flow) + ": " +
+                  (this.Value.Style == YNodeStyle.Block && this.Value is YCollection<YKeyValuePair>
                       ? "\n" + AddIndent(this.Value.ToYamlString())
                       : AddIndent(this.Value.ToYamlString()).Substring(2))
                 : this.Key.ToYamlString(YNodeStyle.Flow) + ": " + this.Value.ToYamlString(YNodeStyle.Flow);

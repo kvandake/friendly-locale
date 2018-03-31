@@ -1,0 +1,14 @@
+alias: &ALIAS
+  AliasDescription: |
+    AliasDescription: There are many variations of passages of Lorem Ipsum available, 
+    but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look
+
+ContentDetailsViewModel:
+  Title: "Title: English"
+  TitleLocale: "TitleLocale: Current Locale: En"
+  SingleDescription: "SingleDescription: Contrary to popular belief, Lorem Ipsum is not simply random text"
+  MultiDescription: |
+    MultiDescription: Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+  ButtonTitle: "ButtonTitle: Submit"
+  <<: *ALIAS
