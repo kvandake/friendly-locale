@@ -5,11 +5,70 @@ Simple and cross platform internationalization for Xamarin and .NET. The localiz
 Features:
 - Cross platform;
 - No dependencies;
-- Support remote resources;
-- Support assets resources;
-- Support embedded resources.
+- Support **Remote Resources**;
+- Support **Assets Resources**;
+- Support **Embedded Resources**.
 
-![screen](docs/screen.png)
+## Install
+https://www.nuget.org/packages/FriendlyLocale
+```
+PM> Install-Package FriendlyLocale
+```
+
+To use, simply reference the nuget package in each of your platform projects.
+* **You can not add to each platform if you use embedded resources from the assembly.**
+
+## Setup
+
+### Embedded resources from Assembly
+[AssemblyContentConfig](FriendlyLocale/Configs/AssemblyContentConfig.cs)
+```cs
+var assembly = this.GetType().GetTypeInfo().Assembly;
+var assemblyConfig = new AssemblyContentConfig(assembly)
+{
+    ResourceFolder = "Locales"
+};
+
+FriendlyLocale.I18N.Initialize(assemblyConfig);
+```
+
+### Assets resources
+[AssetsContentConfig](FriendlyLocale/Configs/LocalContentConfig.cs)
+```cs
+var assetsConfig = new LocalContentConfig
+{
+    ResourceFolder = "Locales"
+};
+
+FriendlyLocale.I18N.Initialize(assetsConfig);
+```
+
+### Remote resources
+[RemoteContentConfig](FriendlyLocale/Configs/RemoteContentConfig.cs)
+#### Offline mode is supported
+[OfflineContentConfig](FriendlyLocale/Configs/OfflineContentConfig.cs)
+- ##### Assets file
+```cs
+var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
+```
+- ##### Embedded resource
+```cs
+var assembly = this.GetType().GetTypeInfo().Assembly;
+var offlineConfig = OfflineContentConfig.FromAssembly(assembly, "ru.yaml", "Locales");
+```
+And the final step of initialization
+```cs
+var remoteConfig = new RemoteContentConfig
+{
+    Locales =
+    {
+        {"ru", "https://any.com/ru.yaml"},
+        {"en", "https://any.com/en.yaml"}
+    }
+};
+// offlineConfig - optional
+FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
+```
 
 ## Localization file syntax
 More inforamtion on http://www.yaml.org/spec/1.2/spec.html.
@@ -62,50 +121,10 @@ Get the value:
 var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription");
 ```
 
-## Setup
+## Sample
+[Sample project](FriendlyLocale.Sample)
+![screen](docs/screen.png)
 
-### Embedded resources from Assembly
-```cs
-var assembly = this.GetType().GetTypeInfo().Assembly;
-var assemblyConfig = new AssemblyContentConfig(assembly)
-{
-    ResourceFolder = "Locales"
-};
-
-FriendlyLocale.I18N.Initialize(assemblyConfig);
-```
-
-### Assets resources
-```cs
-var assetsConfig = new LocalContentConfig
-{
-    ResourceFolder = "Locales"
-};
-
-FriendlyLocale.I18N.Initialize(assetsConfig);
-```
-
-### Remote resources
-#### Supported an offline mode
-- ##### Assets file
-```cs
-var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
-```
-- ##### Embedded resource
-```cs
-var assembly = this.GetType().GetTypeInfo().Assembly;
-var offlineConfig = OfflineContentConfig.FromAssembly(assembly, "ru.yaml", "Locales");
-```
-And the final step of initialization
-```cs
-var remoteConfig = new RemoteContentConfig
-{
-    Locales =
-    {
-        {"ru", "https://any.com/ru.yaml"},
-        {"en", "https://any.com/en.yaml"}
-    }
-};
-// offlineConfig - optional
-FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
-```
+## Roadmap
+- Add more tests;
+- Automatic change of values when changing localization.

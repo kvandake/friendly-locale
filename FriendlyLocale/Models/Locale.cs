@@ -3,7 +3,6 @@
     using System.ComponentModel;
     using System.Globalization;
     using System.Runtime.CompilerServices;
-    using FriendlyLocale.Annotations;
     using FriendlyLocale.Interfaces;
 
     public class Locale : ILocale, INotifyPropertyChanged
@@ -27,8 +26,7 @@
         {
             return this.DisplayName;
         }
-
-        [NotifyPropertyChangedInvocator]
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
