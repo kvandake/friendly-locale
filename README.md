@@ -52,7 +52,7 @@ FriendlyLocale.I18N.Initialize(assetsConfig);
 
 [RemoteContentConfig](FriendlyLocale/Configs/RemoteContentConfig.cs)
 
-#### [Offline mode is supported]
+#### Offline mode is supported
 
 [OfflineContentConfig](FriendlyLocale/Configs/OfflineContentConfig.cs)
 
