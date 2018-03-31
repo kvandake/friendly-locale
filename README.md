@@ -12,6 +12,9 @@ Features:
 - Support **Assets Resources**;
 - Support **Embedded Resources**.
 
+[Sample project](FriendlyLocale.Sample)
+![screen](docs/screen.png)
+
 ## Install
 https://www.nuget.org/packages/FriendlyLocale
 ```
@@ -88,6 +91,15 @@ await FriendlyLocale.I18N.ChangeLocale("en");
 // offline mode for remote
 await FriendlyLocale.I18N.ChangeLocale("offline");
 ```
+Change Locale with download progress
+```cs
+var progress = new Progress<float>();
+progress.ProgressChanged += (s, e) =>
+{
+    Console.WriteLine($"Download progress: {e}");
+};
+await this.I18N.ChangeLocale("en", progress);
+```
 Translate
 ```cs
 var value = FriendlyLocale.I18N.Instance.Translate("key");
@@ -151,10 +163,6 @@ Get the value:
 ```cs
 var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription");
 ```
-
-## Sample
-[Sample project](FriendlyLocale.Sample)
-![screen](docs/screen.png)
 
 ## Roadmap
 - Add more tests;
