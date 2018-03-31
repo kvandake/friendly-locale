@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>FriendlyLocale</id>
+    <version>0.1.0</version>
+    <title>Yaml.I18N.Net: Friendly Locale for Xamarin(Beta)</title>
+    <authors>kvandake</authors>
+    <owners>kvandake</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/kvandake/friendly-locale/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/kvandake/friendly-locale</projectUrl>
+    <description>Yaml.I18N.Net for Xamarin iOS/Android/PCL</description>
+    <summary>Yaml.I18N.Net fo Xamarin iOS/Android/PCL</summary>
+    <releaseNotes>This is beta release</releaseNotes>
+    <copyright></copyright>
+    <language></language>
+    <tags>xamarin,internationalization,translations,i18n,yaml,rails-i18n,localization</tags>
+  </metadata>
+  <files>
+      <!-- PCL -->
+      <file src="FriendlyLocale/bin/Release/FriendlyLocale.Core.*" target="lib/portable-win+net45+wp8+win8+wpa81" />
+
+      <!-- android -->
+      <file src="FriendlyLocale.Droid/bin/Release/FriendlyLocale.*" target="lib/MonoAndroid10" />
+
+      <!-- ios -->
+      <file src="FriendlyLocale.iOS/bin/Release/FriendlyLocale.*" target="lib/Xamarin.iOS10" />
+  </files>
+</package>
