@@ -13,6 +13,7 @@ Features:
 - Support **Assets Resources**;
 - Support **Embedded Resources**.
 
+## Sample
 [Sample project](FriendlyLocale.Sample)
 ![screen](docs/screen.png)
 
