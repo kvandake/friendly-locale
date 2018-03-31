@@ -42,7 +42,7 @@ FriendlyLocale.I18N.Initialize(assetsConfig);
 ```
 
 ### Remote resources
-#### Supported an offline mode
+#### Offline mode is supported
 - ##### Assets file
 ```cs
 var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
