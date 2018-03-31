@@ -90,9 +90,9 @@ var value = FriendlyLocale.I18N.Instance.Translate("key");
 //   key:
 //     innerkey: "InnerValue"
 //     more:
-//       morekey: "more value"
-var innerValue = FriendlyLocale.I18N.Instance.Translate("key.innerkey");
-var moreValue = FriendlyLocale.I18N.Instance.Translate("key.more.morekey");
+//       morekey: "MoreValue"
+var innerValue = FriendlyLocale.I18N.Instance.Translate("key.innerkey"); // InnerValue
+var moreValue = FriendlyLocale.I18N.Instance.Translate("key.more.morekey"); // MoreValue
 ```
 
 ## Localization file syntax
