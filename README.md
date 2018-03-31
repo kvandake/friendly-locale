@@ -124,3 +124,7 @@ var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription"
 ## Sample
 [Sample project](FriendlyLocale.Sample)
 ![screen](docs/screen.png)
+
+## Roadmap
+- Add more tests;
+- Automatic change of values when changing localization.
