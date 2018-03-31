@@ -9,8 +9,6 @@ Features:
 - Support **Assets Resources**;
 - Support **Embedded Resources**.
 
-![screen](docs/screen.png)
-
 ## Install
 https://www.nuget.org/packages/FriendlyLocale
 ```
@@ -118,3 +116,7 @@ Get the value:
 ```cs
 var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription");
 ```
+
+## Sample
+[Sample project](FriendlyLocale.Sample)
+![screen](docs/screen.png)
