@@ -9,10 +9,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "FriendlyLocale.Shared", "Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendlyLocale.Portable", "FriendlyLocale.Portable\FriendlyLocale.Portable.csproj", "{92853FC5-C069-4EEF-9000-50FE96AA9AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendlyLocale.iOS", "FriendlyLocale.iOS\FriendlyLocale.iOS.csproj", "{4BEE79E3-81D4-4404-8AB5-4F88541DCA02}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendlyLocale.Droid", "FriendlyLocale.Droid\FriendlyLocale.Droid.csproj", "{EB62B19E-6345-445B-BA2E-A2D969D33F4A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,15 +27,5 @@ Global
 		{92853FC5-C069-4EEF-9000-50FE96AA9AC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92853FC5-C069-4EEF-9000-50FE96AA9AC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92853FC5-C069-4EEF-9000-50FE96AA9AC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BEE79E3-81D4-4404-8AB5-4F88541DCA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BEE79E3-81D4-4404-8AB5-4F88541DCA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BEE79E3-81D4-4404-8AB5-4F88541DCA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BEE79E3-81D4-4404-8AB5-4F88541DCA02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BEE79E3-81D4-4404-8AB5-4F88541DCA02}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{EB62B19E-6345-445B-BA2E-A2D969D33F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB62B19E-6345-445B-BA2E-A2D969D33F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB62B19E-6345-445B-BA2E-A2D969D33F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB62B19E-6345-445B-BA2E-A2D969D33F4A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB62B19E-6345-445B-BA2E-A2D969D33F4A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
