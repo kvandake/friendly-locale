@@ -13,9 +13,9 @@
 
         public static ITranslateContentClient Create(
             IPlatformComponentsFactory platformComponentsFactory,
-            LocalContentConfig contentConfig)
+            AssetsContentConfig contentConfig)
         {
-            return new LocalTranslateContentClient(platformComponentsFactory, contentConfig);
+            return new AssetsTranslateContentClient(platformComponentsFactory, contentConfig);
         }
 
         public static ITranslateContentClient Create(

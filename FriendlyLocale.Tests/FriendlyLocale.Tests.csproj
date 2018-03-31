@@ -41,7 +41,7 @@
     <Compile Include="Units\I18NTests.cs" />
     <Compile Include="Units\OfflineRemoteTranslateContentClientTests.cs" />
     <Compile Include="Units\RemoteLocaleTests.cs" />
-    <Compile Include="Units\LocalTranslateContentClientTests.cs" />
+    <Compile Include="Units\AssetsTranslateContentClientTests.cs" />
     <Compile Include="Units\RemoteTranslateContentClientTests.cs" />
   </ItemGroup>
   <ItemGroup>

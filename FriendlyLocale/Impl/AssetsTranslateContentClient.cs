@@ -9,12 +9,12 @@
     using FriendlyLocale.Configs;
     using FriendlyLocale.Interfaces;
 
-    internal class LocalTranslateContentClient : ITranslateContentClient
+    internal class AssetsTranslateContentClient : ITranslateContentClient
     {
-        private readonly LocalContentConfig contentConfig;
+        private readonly AssetsContentConfig contentConfig;
         private readonly IPlatformResourceFileManager platformResourceFileManager;
 
-        public LocalTranslateContentClient(IPlatformComponentsFactory platformComponentsFactory, LocalContentConfig contentConfig)
+        public AssetsTranslateContentClient(IPlatformComponentsFactory platformComponentsFactory, AssetsContentConfig contentConfig)
         {
             this.platformResourceFileManager = platformComponentsFactory.CreateResourceFileManager();
             this.contentConfig = contentConfig;

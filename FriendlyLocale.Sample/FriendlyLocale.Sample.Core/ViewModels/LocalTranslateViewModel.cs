@@ -11,7 +11,7 @@
 
         protected override void ReloadLocale()
         {
-            var localeConfig = new LocalContentConfig
+            var localeConfig = new AssetsContentConfig
             {
                 ResourceFolder = "Locales"
             };

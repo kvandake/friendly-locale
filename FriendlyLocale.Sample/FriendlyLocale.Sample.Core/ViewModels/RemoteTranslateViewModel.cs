@@ -28,8 +28,8 @@
             // var assembly = this.GetType().GetTypeInfo().Assembly;
             // var offlineConfig = OfflineContentConfig.FromAssembly(assembly, "ru.yaml", "Locales");
 
-            // local offline locale
-            var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
+            // assets offline locale
+            var offlineConfig = OfflineContentConfig.FromAssets("en.yaml", "Locales");
 
             FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
             this.ReloadItems();

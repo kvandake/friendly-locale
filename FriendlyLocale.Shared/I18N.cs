@@ -21,7 +21,7 @@
             InitializeInternal(TranslateContentClientFactory.Create(contentConfig));
         }
 
-        public static void Initialize(LocalContentConfig contentConfig)
+        public static void Initialize(AssetsContentConfig contentConfig)
         {
             InitializeInternal(TranslateContentClientFactory.Create(CreatePlatformComponentsFactory(), contentConfig));
         }

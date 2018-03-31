@@ -30,7 +30,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Configs\AssemblyContentConfig.cs" />
-    <Compile Include="Configs\LocalContentConfig.cs" />
+    <Compile Include="Configs\AssetsContentConfig.cs" />
     <Compile Include="Configs\OfflineContentConfig.cs" />
     <Compile Include="Configs\RemoteContentConfig.cs" />
     <Compile Include="Impl\I18NProvider.cs" />
@@ -43,7 +43,7 @@
     <Compile Include="Extensions\TranslateExtensions.cs" />
     <Compile Include="II18N.cs" />
     <Compile Include="Impl\AssemblyTranslateContentClient.cs" />
-    <Compile Include="Impl\LocalTranslateContentClient.cs" />
+    <Compile Include="Impl\AssetsTranslateContentClient.cs" />
     <Compile Include="Impl\OfflineRemoteTranslateContentClient.cs" />
     <Compile Include="Impl\RemoteTranslateContentClient.cs" />
     <Compile Include="Impl\TranslateContentClientFactory.cs" />

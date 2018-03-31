@@ -1,6 +1,6 @@
 ﻿namespace FriendlyLocale.Configs
 {
-    public class LocalContentConfig
+    public class AssetsContentConfig
     {
         public string ResourceFolder { get; set; } = "Locales";
     }

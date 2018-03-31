@@ -33,7 +33,7 @@ FriendlyLocale.I18N.Initialize(assemblyConfig);
 ```
 
 ### Assets resources
-[AssetsContentConfig](FriendlyLocale/Configs/LocalContentConfig.cs)
+[AssetsContentConfig](FriendlyLocale/Configs/AssetsContentConfig.cs)
 ```cs
 var assetsConfig = new LocalContentConfig
 {

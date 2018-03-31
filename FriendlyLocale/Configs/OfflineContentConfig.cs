@@ -24,7 +24,7 @@
             };
         }
 
-        public static OfflineContentConfig FromLocal(string fileName, string resourceFolder = null)
+        public static OfflineContentConfig FromAssets(string fileName, string resourceFolder = null)
         {
             return new OfflineContentConfig
             {
