@@ -5,9 +5,9 @@ Simple and cross platform internationalization for Xamarin and .NET. The localiz
 Features:
 - Cross platform;
 - No dependencies;
-- Support remote resources;
-- Support assets resources;
-- Support embedded resources.
+- Support **Remote Resources**;
+- Support **Assets Resources**;
+- Support **Embedded Resources**.
 
 ![screen](docs/screen.png)
 
