@@ -73,6 +73,28 @@ var remoteConfig = new RemoteContentConfig
 FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
 ```
 
+## Using
+Change Locale
+```cs
+// basic
+await FriendlyLocale.I18N.ChangeLocale("en");
+
+// offline mode for remote
+await FriendlyLocale.I18N.ChangeLocale("offline");
+```
+Translate
+```cs
+var value = FriendlyLocale.I18N.Instance.Translate("key");
+
+// en.yaml:
+//   key:
+//     innerkey: "InnerValue"
+//     more:
+//       morekey: "more value"
+var innerValue = FriendlyLocale.I18N.Instance.Translate("key.innerkey");
+var moreValue = FriendlyLocale.I18N.Instance.Translate("key.more.morekey");
+```
+
 ## Localization file syntax
 More inforamtion on http://www.yaml.org/spec/1.2/spec.html.
 ### Simple using
