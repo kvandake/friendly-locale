@@ -47,6 +47,7 @@ var multiDescription2 = I18N.Instance.Translate("FirstViewModel.MultiDescription
 ```
 
 ### Using Anchor - Alias
+More inforamtion on https://learnxinyminutes.com/docs/yaml/.
 ```yaml
 alias: &ALIAS
   AliasDescription: "AliasDescription"
@@ -54,7 +55,6 @@ alias: &ALIAS
 FirstViewModel:
   <<: *ALIAS
 ```
-More inforamtion on https://learnxinyminutes.com/docs/yaml/
 Get the value:
 ```cs
 var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription");
