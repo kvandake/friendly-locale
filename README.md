@@ -49,7 +49,7 @@ FriendlyLocale.I18N.Initialize(assetsConfig);
 [OfflineContentConfig](FriendlyLocale/Configs/OfflineContentConfig.cs)
 - ##### Assets file
 ```cs
-var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
+var offlineConfig = OfflineContentConfig.FromAssets("en.yaml", "Locales");
 ```
 - ##### Embedded resource
 ```cs
