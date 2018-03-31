@@ -21,6 +21,7 @@ To use, simply reference the nuget package in each of your platform projects.
 ## Setup
 
 ### Embedded resources from Assembly
+[AssemblyContentConfig](FriendlyLocale/Configs/AssemblyContentConfig.cs)
 ```cs
 var assembly = this.GetType().GetTypeInfo().Assembly;
 var assemblyConfig = new AssemblyContentConfig(assembly)
@@ -32,6 +33,7 @@ FriendlyLocale.I18N.Initialize(assemblyConfig);
 ```
 
 ### Assets resources
+[AssetsContentConfig](FriendlyLocale/Configs/LocalContentConfig.cs)
 ```cs
 var assetsConfig = new LocalContentConfig
 {
@@ -42,7 +44,9 @@ FriendlyLocale.I18N.Initialize(assetsConfig);
 ```
 
 ### Remote resources
+[RemoteContentConfig](FriendlyLocale/Configs/RemoteContentConfig.cs)
 #### Offline mode is supported
+[OfflineContentConfig](FriendlyLocale/Configs/OfflineContentConfig.cs)
 - ##### Assets file
 ```cs
 var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
