@@ -127,4 +127,5 @@ var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription"
 
 ## Roadmap
 - Add more tests;
-- Automatic change of values when changing localization.
+- Automatic change of values when changing localization;
+- Detailed code documentation.
