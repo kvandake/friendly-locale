@@ -1,4 +1,4 @@
-# Friendly Locale(Beta)
+# Friendly Locale(Beta) 
 [website](https://kvandake.github.io/friendly-locale/)
 
 Simple and cross platform internationalization for Xamarin and .NET. The localization is similar to [Ruby On Rails](http://guides.rubyonrails.org/i18n.html).
@@ -8,12 +8,61 @@ Simple and cross platform internationalization for Xamarin and .NET. The localiz
 Features:
 - Cross platform;
 - No dependencies;
+- [Yaml](http://www.yaml.org/) instead of [Resx](https://msdn.microsoft.com/en-us/LIBRARY/ekyft91f(v=vs.85).aspx);
 - Support **Remote Resources**;
 - Support **Assets Resources**;
 - Support **Embedded Resources**.
 
 [Sample project](FriendlyLocale.Sample)
 ![screen](docs/screen.png)
+
+## Yaml as the foundation
+[Yaml website](http://www.yaml.org/)
+
+The library use YAML because it is easier for humans to read and write than other common data formats like XML or JSON.
+### The differences between yaml and resx
+Unfriendly format on resx
+```xml
+<data name="FirstViewModel.Title" xml:space="preserve">
+    <value>FirstViewModel Title</value>
+</data>
+<data name="FirstViewModel.Description" xml:space="preserve">
+    <value>FirstViewModel Description</value>
+</data>
+<data name="FirstViewModel.SubmitTitle" xml:space="preserve">
+    <value>SubmitTitle</value>
+</data>
+<data name="FirstViewModel.EmptyData.Title" xml:space="preserve">
+    <value>FirstViewModel EmptyData Title</value>
+</data>
+<data name="FirstViewModel.EmptyData.Description" xml:space="preserve">
+    <value>FirstViewModel EmptyData Description</value>
+</data>
+<data name="SecondViewModel.Title" xml:space="preserve">
+    <value>SecondViewModel Title</value>
+</data>
+<data name="SecondViewModel.SubmitTitle" xml:space="preserve">
+    <value>SubmitTitle</value>
+</data>
+```
+This is easily written on the Yaml markup:
+```yaml
+
+buttons: &BUTTONS
+  SubmitTitle: "SubmitTitle"
+
+FirstViewModel:
+  Title: "FirstViewModel Title"
+  Description: "FirstViewModel Description"
+  <<: *BUTTONS
+  EmptyData:
+    Title: "FirstViewModel EmptyData Title"
+    Description: "FirstViewModel EmptyData Description"
+    
+SecondViewModel:
+  Title: "SecondViewModel Title"
+  <<: *BUTTONS
+```
 
 ## Install
 https://www.nuget.org/packages/FriendlyLocale
