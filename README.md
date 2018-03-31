@@ -11,6 +11,63 @@ Features:
 
 ![screen](docs/screen.png)
 
+## Install
+https://www.nuget.org/packages/FriendlyLocale
+```
+PM> Install-Package FriendlyLocale
+```
+
+To use, simply reference the nuget package in each of your platform projects.
+* **You can not add to each platform if you use embedded resources from the assembly.**
+
+## Setup
+
+### Embedded resources from Assembly
+```cs
+var assembly = this.GetType().GetTypeInfo().Assembly;
+var assemblyConfig = new AssemblyContentConfig(assembly)
+{
+    ResourceFolder = "Locales"
+};
+
+FriendlyLocale.I18N.Initialize(assemblyConfig);
+```
+
+### Assets resources
+```cs
+var assetsConfig = new LocalContentConfig
+{
+    ResourceFolder = "Locales"
+};
+
+FriendlyLocale.I18N.Initialize(assetsConfig);
+```
+
+### Remote resources
+#### Supported an offline mode
+- ##### Assets file
+```cs
+var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
+```
+- ##### Embedded resource
+```cs
+var assembly = this.GetType().GetTypeInfo().Assembly;
+var offlineConfig = OfflineContentConfig.FromAssembly(assembly, "ru.yaml", "Locales");
+```
+And the final step of initialization
+```cs
+var remoteConfig = new RemoteContentConfig
+{
+    Locales =
+    {
+        {"ru", "https://any.com/ru.yaml"},
+        {"en", "https://any.com/en.yaml"}
+    }
+};
+// offlineConfig - optional
+FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
+```
+
 ## Localization file syntax
 More inforamtion on http://www.yaml.org/spec/1.2/spec.html.
 ### Simple using
@@ -60,52 +117,4 @@ FirstViewModel:
 Get the value:
 ```cs
 var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription");
-```
-
-## Setup
-
-### Embedded resources from Assembly
-```cs
-var assembly = this.GetType().GetTypeInfo().Assembly;
-var assemblyConfig = new AssemblyContentConfig(assembly)
-{
-    ResourceFolder = "Locales"
-};
-
-FriendlyLocale.I18N.Initialize(assemblyConfig);
-```
-
-### Assets resources
-```cs
-var assetsConfig = new LocalContentConfig
-{
-    ResourceFolder = "Locales"
-};
-
-FriendlyLocale.I18N.Initialize(assetsConfig);
-```
-
-### Remote resources
-#### Supported an offline mode
-- ##### Assets file
-```cs
-var offlineConfig = OfflineContentConfig.FromLocal("en.yaml", "Locales");
-```
-- ##### Embedded resource
-```cs
-var assembly = this.GetType().GetTypeInfo().Assembly;
-var offlineConfig = OfflineContentConfig.FromAssembly(assembly, "ru.yaml", "Locales");
-```
-And the final step of initialization
-```cs
-var remoteConfig = new RemoteContentConfig
-{
-    Locales =
-    {
-        {"ru", "https://any.com/ru.yaml"},
-        {"en", "https://any.com/en.yaml"}
-    }
-};
-// offlineConfig - optional
-FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
 ```
