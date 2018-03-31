@@ -36,7 +36,9 @@ FriendlyLocale.I18N.Initialize(assemblyConfig);
 ```
 
 ### Assets resources
+
 [AssetsContentConfig](FriendlyLocale/Configs/AssetsContentConfig.cs)
+
 ```cs
 var assetsConfig = new LocalContentConfig
 {
@@ -47,9 +49,13 @@ FriendlyLocale.I18N.Initialize(assetsConfig);
 ```
 
 ### Remote resources
+
 [RemoteContentConfig](FriendlyLocale/Configs/RemoteContentConfig.cs)
-#### Offline mode is supported
+
+#### [Offline mode is supported]
+
 [OfflineContentConfig](FriendlyLocale/Configs/OfflineContentConfig.cs)
+
 - ##### Assets file
 ```cs
 var offlineConfig = OfflineContentConfig.FromAssets("en.yaml", "Locales");
