@@ -93,7 +93,7 @@ FriendlyLocale.I18N.Initialize(assemblyConfig);
 [AssetsContentConfig.cs](FriendlyLocale/Configs/AssetsContentConfig.cs)
 
 ```cs
-var assetsConfig = new LocalContentConfig
+var assetsConfig = new AssetsContentConfig
 {
     ResourceFolder = "Locales"
 };
