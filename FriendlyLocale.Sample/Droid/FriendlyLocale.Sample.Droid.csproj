@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="Impl\PersonalFolderHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\LocaleSwitchRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="MainActivity.cs" />
   </ItemGroup>

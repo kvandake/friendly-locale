@@ -31,8 +31,7 @@
 
                 nameLabel.SetBinding(Label.TextProperty, "Title");
                 descriptionLabel.SetBinding(Label.TextProperty, "Description");
-                var checkBox = new Switch();
-                checkBox.IsEnabled = false;
+                var checkBox = new LocaleSwitch {IsEnabled = false};
                 checkBox.SetBinding(Switch.IsToggledProperty, "IsChecked", BindingMode.TwoWay);
                 checkBox.VerticalOptions = LayoutOptions.End;
 
