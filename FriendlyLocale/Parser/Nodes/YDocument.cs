@@ -1,4 +1,4 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -12,25 +12,6 @@
 
         protected override YNode FirstNode => this.Children.FirstOrDefault();
         protected override YNode LastNode => this.Children.LastOrDefault();
-
-        internal new static YDocument Parse(Tokenizer tokenizer)
-        {
-            if (tokenizer.Current.Kind != TokenKind.Document)
-            {
-                return null;
-            }
-
-            tokenizer.MoveNext();
-
-            var items = new List<YNode>();
-
-            while (tokenizer.Current.Kind != TokenKind.Document && tokenizer.Current.Kind != TokenKind.Eof)
-            {
-                items.Add(YNode.Parse(tokenizer));
-            }
-
-            return new YDocument(YNodeStyle.Block, items.ToArray());
-        }
 
         public override void Add(params YNode[] content)
         {

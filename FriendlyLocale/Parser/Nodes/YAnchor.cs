@@ -1,11 +1,11 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
     using System.Collections.Generic;
 
     internal class YAnchor : YNode
     {
         // https://gist.github.com/bowsersenior/979804
-        private YAnchor(YNode value)
+        internal YAnchor(YNode value)
             : base(YNodeStyle.Block)
         {
             this.Value = value;
@@ -29,21 +29,6 @@
                         return new List<YNode>();
                 }
             }
-        }
-
-        internal new static YNode Parse(Tokenizer tokenizer)
-        {
-            switch (tokenizer.Current.Kind)
-            {
-                case TokenKind.Anchor:
-                    var name = tokenizer.Current.Value;
-                    tokenizer.MoveNext();
-                    var anchor = new YAnchor(YMapping.Parse(tokenizer));
-                    tokenizer.Anchors[name] = anchor;
-                    break;
-            }
-
-            return null;
         }
 
         public override string ToString(YNodeStyle style)

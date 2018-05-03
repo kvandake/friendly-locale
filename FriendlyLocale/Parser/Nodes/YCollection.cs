@@ -1,4 +1,4 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
     using System.Collections;
     using System.Collections.Generic;

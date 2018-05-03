@@ -1,5 +1,10 @@
+buttons: &BUTTONS
+  AliasButton: "AliasButton"
+
 ViewModel:
   Title: "En TitleValue"
   Locale: "en"
+  <<: *BUTTONS
   Buttons:
     SubmitButton: "En SubmitButtonValue"
+    <<: *BUTTONS

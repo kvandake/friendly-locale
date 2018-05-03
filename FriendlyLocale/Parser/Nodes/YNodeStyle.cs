@@ -1,4 +1,4 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
     internal enum YNodeStyle
     {
