@@ -1,7 +1,8 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Exceptions
 {
     using System;
     using System.Linq;
+    using FriendlyLocale.Parser.Core;
 
     public class ParseException : Exception
     {
@@ -50,11 +51,16 @@
         {
             return new ParseException(scanner.Content, scanner.Index, $"unexpected {GetTokenName(scanner.Current)}, {expected} expected");
         }
-
-        internal static ParseException UnexpectedToken(Tokenizer tokenizer, TokenKind expected)
+        
+        internal static ParseException Tokenizer(ITokenizer tokenizer, string message)
         {
-            return new ParseException(tokenizer.Scanner.Content, tokenizer.Current.Index,
-                $"unexpected {tokenizer.Current.Kind}, {expected} expected");
+            return new ParseException(tokenizer.Scanner.Content, tokenizer.Scanner.Index, message);
+        }
+
+        internal static ParseException UnexpectedToken(ITokenizer tokenizer, TokenKind expected)
+        {
+            return new ParseException(tokenizer.Scanner.Content, tokenizer.Current.Value.Index,
+                $"unexpected {tokenizer.Current.Value.Kind}, {expected} expected");
         }
 
         private static string GetTokenNames(params char[] current)

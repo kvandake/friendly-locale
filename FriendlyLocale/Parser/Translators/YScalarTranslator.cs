@@ -1,26 +1,24 @@
-﻿namespace FriendlyLocale.Parser.Strategies
+﻿namespace FriendlyLocale.Parser.Translators
 {
     using System;
+    using FriendlyLocale.Parser.Core;
     using FriendlyLocale.Parser.Nodes;
 
-    /// <summary>
-    ///     Парсинг значений.
-    /// </summary>
-    internal class YScalarParserStrategy : IYParserStrategy
+    internal partial class YNodeTranslator
     {
-        public YNode Parse(Tokenizer tokenizer, IYParser parser)
+        private YScalar GetScalarValueDependent(ITokenizer tokenizer)
         {
-            switch (tokenizer.Current.Kind)
+            switch (tokenizer.Current.Value.Kind)
             {
                 case TokenKind.StringDouble:
                 case TokenKind.StringSingle:
                 case TokenKind.StringFolding:
                 case TokenKind.StringLiteral:
                 {
-                    var kind = tokenizer.Current.Kind;
-                    var value = tokenizer.Current.Value;
+                    var kind = tokenizer.Current.Value.Kind;
+                    var value = tokenizer.Current.Value.Value;
 
-                    if (tokenizer.Current.Kind == TokenKind.StringDouble)
+                    if (tokenizer.Current.Value.Kind == TokenKind.StringDouble)
                     {
                         value = YScalar.UnescapeString(value);
                     }
@@ -32,7 +30,7 @@
                 }
                 case TokenKind.StringPlain:
                 {
-                    var value = tokenizer.Current.Value;
+                    var value = tokenizer.Current.Value.Value;
 
                     tokenizer.MoveNext();
 

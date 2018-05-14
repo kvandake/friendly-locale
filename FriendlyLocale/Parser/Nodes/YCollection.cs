@@ -13,7 +13,7 @@
         {
             this.Initialize(content);
         }
-
+        
         internal List<TModel> Children => this.children ?? (this.children = new List<TModel>());
 
         protected abstract YNode FirstNode { get; }

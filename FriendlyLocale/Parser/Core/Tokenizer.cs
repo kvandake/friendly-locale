@@ -1,42 +1,27 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Core
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using FriendlyLocale.Parser.Nodes;
+    using FriendlyLocale.Parser.Exceptions;
 
-    internal class Tokenizer : IEnumerable<Token>, IDisposable
+    internal class Tokenizer : SubTokinizer, IEnumerable<Token>
     {
-        private IDictionary<string, YAnchor> anchors;
-        private LinkedListNode<Token> currentNode;
-
         public Tokenizer(Scanner scanner)
+            : base(scanner, Tokenize(scanner))
         {
-            this.Scanner = scanner;
-            this.Tokens = new LinkedList<Token>(Tokenize(scanner));
-            this.currentNode = this.Tokens.First;
         }
 
-        internal IDictionary<string, YAnchor> Anchors => this.anchors ?? (this.anchors = new Dictionary<string, YAnchor>());
-
-        public Scanner Scanner { get; }
-        public LinkedList<Token> Tokens { get; private set; }
-        public Token Current => this.currentNode.Value;
-        public LinkedListNode<Token> Previous => this.currentNode.Previous;
-        public LinkedListNode<Token> Next => this.currentNode.Next;
-
-        public void Dispose()
-        {
-            this.Tokens = null;
-        }
+        public LinkedListNode<Token> Previous => this.Current.Previous;
+        public LinkedListNode<Token> Next => this.Current.Next;
 
         public IEnumerator<Token> GetEnumerator()
         {
             do
             {
-                yield return this.Current;
+                yield return this.Current.Value;
             } while (this.MoveNext());
         }
 
@@ -45,20 +30,9 @@
             return this.GetEnumerator();
         }
 
-        public bool MovePrevious()
-        {
-            return (this.currentNode = this.currentNode.Previous) != null;
-        }
-
-        public bool MoveNext()
-        {
-            return (this.currentNode = this.currentNode.Next) != null;
-        }
-
         private static IReadOnlyList<Token> Tokenize(Scanner scanner)
         {
-            var tokens = new List<Token>();
-
+            var tokens = new LinkedList<Token>();
             while (!scanner.IsEnd)
             {
                 Read(scanner, ref tokens);
@@ -69,23 +43,21 @@
                 }
             }
 
-            if (tokens.LastOrDefault()?.Kind == TokenKind.Eof)
+            if (tokens.Last?.Value.Kind == TokenKind.Eof)
             {
-                tokens.RemoveAt(tokens.Count - 1);
+                tokens.RemoveLast();
             }
 
-            while (scanner.CurrentIndent >= 0)
-            {
-                scanner.PopIndent();
-                tokens.Add(new Token(scanner, TokenKind.Unindent, length: 0));
-            }
+            tokens.AddLast(new Token(
+                scanner: scanner,
+                kind: TokenKind.Eof,
+                indentLevel: scanner.CurrentIndent,
+                length: 0));
 
-            tokens.Add(new Token(scanner, TokenKind.Eof, length: 0));
-
-            return tokens;
+            return tokens.ToList();
         }
 
-        private static void Read(Scanner scanner, ref List<Token> tokens)
+        private static void Read(Scanner scanner, ref LinkedList<Token> tokens)
         {
             scanner.SkipEmptyLines();
             scanner.SkipWhiteSpace();
@@ -107,30 +79,19 @@
                     indent = scanner.SkipWhiteSpace();
                 }
 
-                if (scanner.Index > 0 && scanner.IsLineBreak(-1))
-                {
-                    while (indent < scanner.CurrentIndent)
-                    {
-                        scanner.PopIndent();
-                        tokens.Add(new Token(scanner, TokenKind.Unindent, length: 0));
-                    }
-                }
-
                 if (indent == 0)
                 {
                     switch (scanner.Current)
                     {
                         case '%':
                             var begin = scanner.Index;
-
-                            while (scanner.CurrentIndent >= 0)
-                            {
-                                scanner.PopIndent();
-                                tokens.Add(new Token(scanner, TokenKind.Unindent, length: 0));
-                            }
-
                             scanner.MaybeSimpleKey = false;
-                            tokens.Add(new Token(scanner, TokenKind.Directive, scanner.ReadUntilLineBreakOrEof().Substring(1), begin));
+                            tokens.AddLast(new Token(
+                                scanner: scanner,
+                                kind: TokenKind.Directive,
+                                value: scanner.ReadUntilLineBreakOrEof().Substring(1),
+                                indentLevel: scanner.CurrentIndent,
+                                index: begin));
 
                             return;
                         default:
@@ -139,14 +100,8 @@
                                 break;
                             }
 
-                            while (scanner.CurrentIndent >= 0)
-                            {
-                                scanner.PopIndent();
-                                tokens.Add(new Token(scanner, TokenKind.Unindent, length: 0));
-                            }
-
                             scanner.MaybeSimpleKey = false;
-                            tokens.Add(NewToken(scanner.Current == '-' ? TokenKind.Document : TokenKind.Eof, 3));
+                            tokens.AddLast(NewToken(scanner.Current == '-' ? TokenKind.Document : TokenKind.Eof, 3));
 
                             return;
                     }
@@ -156,7 +111,11 @@
             switch (scanner.Current)
             {
                 case '\0':
-                    tokens.Add(new Token(scanner, TokenKind.Eof, length: 0));
+                    tokens.AddLast(new Token(
+                        scanner: scanner,
+                        kind: TokenKind.Eof,
+                        indentLevel: scanner.CurrentIndent,
+                        length: 0));
 
                     return;
                 case '!':
@@ -165,7 +124,13 @@
                     var value = scanner.ReadUntilWhiteSpaceOrEof();
 
                     scanner.MaybeSimpleKey = false;
-                    tokens.Add(new Token(scanner, TokenKind.Tag, value, begin, scanner.Index - begin));
+                    tokens.AddLast(new Token(
+                        scanner: scanner,
+                        kind: TokenKind.Tag,
+                        value: value,
+                        indentLevel: scanner.CurrentIndent,
+                        index: begin,
+                        length: scanner.Index - begin));
 
                     return;
                 }
@@ -176,7 +141,7 @@
 
                     scanner.FlowLevel++;
                     scanner.MaybeSimpleKey = true;
-                    tokens.Add(NewToken(kind == '[' ? TokenKind.SequenceBegin : TokenKind.MappingBegin));
+                    tokens.AddLast(NewToken(kind == '[' ? TokenKind.SequenceBegin : TokenKind.MappingBegin));
 
                     return;
                 }
@@ -187,13 +152,13 @@
 
                     scanner.FlowLevel--;
                     scanner.MaybeSimpleKey = false;
-                    tokens.Add(NewToken(kind == ']' ? TokenKind.SequenceEnd : TokenKind.MappingEnd));
+                    tokens.AddLast(NewToken(kind == ']' ? TokenKind.SequenceEnd : TokenKind.MappingEnd));
 
                     return;
                 }
                 case ',':
                     scanner.MaybeSimpleKey = true;
-                    tokens.Add(NewToken(TokenKind.ItemDelimiter));
+                    tokens.AddLast(NewToken(TokenKind.ItemDelimiter));
 
                     return;
                 case '-' when scanner.IsWhiteSpaceOrLineBreakOrEof(1):
@@ -213,14 +178,23 @@
                     if (column > scanner.CurrentIndent)
                     {
                         scanner.PushIndent(column);
-                        tokens.Add(new Token(scanner, TokenKind.Indent, scanner.Index - column, column));
+                        tokens.AddLast(new Token(
+                            scanner: scanner,
+                            kind: TokenKind.Indent,
+                            indentLevel: scanner.CurrentIndent,
+                            index: scanner.Index - column,
+                            length: column));
                     }
 
                     var begin = scanner.Index++;
 
                     scanner.SkipWhiteSpace();
                     scanner.MaybeSimpleKey = true;
-                    tokens.Add(new Token(scanner, TokenKind.SequenceValue, begin));
+                    tokens.AddLast(new Token(
+                        scanner: scanner,
+                        kind: TokenKind.SequenceValue,
+                        indentLevel: scanner.CurrentIndent,
+                        index: begin));
 
                     return;
                 }
@@ -235,33 +209,30 @@
                         if (indent > scanner.CurrentIndent)
                         {
                             scanner.PushIndent(indent);
-                            tokens.Add(new Token(scanner, TokenKind.Indent, scanner.Index - indent, indent));
+                            tokens.AddLast(new Token(
+                                scanner: scanner,
+                                kind: TokenKind.Indent,
+                                indentLevel: scanner.CurrentIndent,
+                                index: scanner.Index - indent,
+                                length: indent));
                         }
                     }
 
                     scanner.MaybeSimpleKey = !scanner.IsFlowContent;
-                    tokens.Add(NewToken(TokenKind.MappingKey));
+                    tokens.AddLast(NewToken(TokenKind.MappingKey));
 
                     return;
                 case ':' when scanner.IsFlowContent || scanner.IsWhiteSpaceOrLineBreakOrEof(1):
-                    if (!scanner.IsFlowContent && tokens.Any())
+                    if (!scanner.IsFlowContent)
                     {
                         if (!scanner.MaybeSimpleKey)
                         {
                             throw ParseException.TokenNotAllowed(scanner);
                         }
-
-                        indent = scanner.GetColumn(tokens.Last().Index);
-
-                        if (indent > scanner.CurrentIndent)
-                        {
-                            scanner.PushIndent(indent);
-                            tokens.Insert(tokens.Count - 1, new Token(scanner, TokenKind.Indent, scanner.Index - indent, indent));
-                        }
                     }
 
                     scanner.MaybeSimpleKey = !scanner.IsFlowContent;
-                    tokens.Add(NewToken(TokenKind.MappingValue));
+                    tokens.AddLast(NewToken(TokenKind.MappingValue));
 
                     return;
                 case '&':
@@ -276,13 +247,15 @@
                         throw ParseException.UnexpectedToken(scanner, "identifier");
                     }
 
-                    //                    if (!scanner.IsWhiteSpaceOrEof() && "]}?:,%@`".IndexOf(scanner.Current) == -1)
-                    //                    {
-                    //                        throw ParseException.UnexpectedToken(scanner, ' ');
-                    //                    }
-
                     scanner.MaybeSimpleKey = kind == '*';
-                    tokens.Add(new Token(scanner, kind == '*' ? TokenKind.Alias : TokenKind.Anchor, value, begin, scanner.Index - begin));
+                    tokens.AddLast(
+                        new Token(
+                            scanner: scanner,
+                            kind: kind == '*' ? TokenKind.Alias : TokenKind.Anchor,
+                            value: value,
+                            indentLevel: scanner.CurrentIndent,
+                            index: begin,
+                            length: scanner.Index - begin));
 
                     return;
                 }
@@ -379,8 +352,13 @@
 
                     var value = sb.ToString();
                     scanner.MaybeSimpleKey = false;
-                    tokens.Add(new Token(scanner, kind == '>' ? TokenKind.StringFolding : TokenKind.StringLiteral, value, begin,
-                        scanner.Index - begin));
+                    tokens.AddLast(new Token(
+                        scanner: scanner,
+                        kind: kind == '>' ? TokenKind.StringFolding : TokenKind.StringLiteral,
+                        value: value,
+                        indentLevel: scanner.CurrentIndent,
+                        index: begin,
+                        length: scanner.Index - begin));
 
                     return;
                 }
@@ -433,8 +411,13 @@
                     }
 
                     scanner.MaybeSimpleKey = true;
-                    tokens.Add(new Token(scanner, kind == '"' ? TokenKind.StringDouble : TokenKind.StringSingle, sb.ToString(), begin,
-                        scanner.Index - begin));
+                    tokens.AddLast(new Token(
+                        scanner: scanner,
+                        kind: kind == '"' ? TokenKind.StringDouble : TokenKind.StringSingle,
+                        value: sb.ToString(),
+                        indentLevel: scanner.CurrentIndent,
+                        index: begin,
+                        length: scanner.Index - begin));
 
                     return;
                 }
@@ -510,7 +493,33 @@
                     }
 
                     scanner.MaybeSimpleKey = true;
-                    tokens.Add(new Token(scanner, TokenKind.StringPlain, sb.ToString().TrimEnd(), begin, scanner.Index - begin));
+                    // maybe an indent?
+                    var tokenLine = scanner.GetLine(begin);
+                    if (tokens.Last?.Value.Line != tokenLine)
+                    {
+                        indent = scanner.GetColumn(begin);
+                        if (indent != scanner.CurrentIndent)
+                        {
+                            scanner.PushIndent(indent);
+                            var indentToken = new Token(
+                                scanner: scanner,
+                                kind: TokenKind.Indent,
+                                indentLevel: scanner.CurrentIndent,
+                                index: begin - indent,
+                                length: indent);
+                            tokens.AddLast(indentToken);
+                        }
+                    }
+
+                    var token = new Token(
+                        scanner: scanner,
+                        kind: TokenKind.StringPlain,
+                        value: sb.ToString().TrimEnd(),
+                        indentLevel: scanner.CurrentIndent,
+                        index: begin,
+                        length: scanner.Index - begin);
+
+                    tokens.AddLast(token);
 
                     return;
                 }
@@ -518,7 +527,11 @@
 
             Token NewToken(TokenKind kind, int? length = null)
             {
-                var rt = new Token(scanner, kind, length: length);
+                var rt = new Token(
+                    scanner: scanner,
+                    kind: kind,
+                    indentLevel: scanner.CurrentIndent,
+                    length: length);
 
                 scanner.Index += rt.Length;
 

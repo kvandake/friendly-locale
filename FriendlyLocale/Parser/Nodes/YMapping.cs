@@ -3,12 +3,15 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class YMapping : YCollection<YMapping.YKeyValuePair>
+    internal class YMapping : YCollection<YKeyValuePair>
     {
-        public YMapping(YNodeStyle style = YNodeStyle.Block, params YNode[] content)
+        public YMapping(int indentLevel, YNodeStyle style = YNodeStyle.Block, params YNode[] content)
             : base(style, content)
         {
+            this.IndentLevel = indentLevel;
         }
+        
+        public int IndentLevel { get; }
 
         protected override YNode FirstNode => this.Children.FirstOrDefault();
         protected override YNode LastNode => this.Children.LastOrDefault();
@@ -71,34 +74,6 @@
                     : "{}";
         }
 
-        internal class YKeyValuePair : YNode
-        {
-            public YKeyValuePair(YNode key, YNode value)
-                : base(YNodeStyle.Block)
-            {
-                this.Key = key;
-                this.Value = value;
-            }
-
-            public YNode Key { get; }
-            public YNode Value { get; }
-
-            public override string ToString(YNodeStyle style)
-            {
-                return style == YNodeStyle.Block
-                    ? $"? {this.Key}\n: {this.Value}"
-                    : $"? {this.Key.ToString(style)} : {this.Value.ToString(style)}";
-            }
-
-            public override string ToYamlString(YNodeStyle style)
-            {
-                return style == YNodeStyle.Block
-                    ? this.Key.ToYamlString(YNodeStyle.Flow) + ": " +
-                      (this.Value.Style == YNodeStyle.Block && this.Value is YCollection<YKeyValuePair>
-                          ? "\n" + AddIndent(this.Value.ToYamlString())
-                          : AddIndent(this.Value.ToYamlString()).Substring(2))
-                    : this.Key.ToYamlString(YNodeStyle.Flow) + ": " + this.Value.ToYamlString(YNodeStyle.Flow);
-            }
-        }
+        
     }
 }

@@ -3,25 +3,22 @@
     using System.Diagnostics;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using FriendlyLocale.Parser.Core;
+    using FriendlyLocale.Parser.Exceptions;
     using FriendlyLocale.Parser.Nodes;
-    using FriendlyLocale.Parser.Strategies;
+    using YNodeTranslator = FriendlyLocale.Parser.Translators.YNodeTranslator;
 
-    internal class YParser : IYParser
+    internal class YParser
     {
-        private IList<IYParserStrategy> strategies;
+        private const string Separator = ".";
 
-        private IEnumerable<IYParserStrategy> Strategies => this.strategies ?? (this.strategies = this.GetStrategies());
-        
-        public YParser(YParserConfig config, params string[] contents)
+        public YParser(params string[] contents)
         {
-            this.Config = config ?? new YParserConfig();
             this.map = this.ParseContent(contents);
         }
 
         private IDictionary<string, string> map { get; }
 
-        public YParserConfig Config { get; }
-        
         public string FindValue(params string[] innerKeys)
         {
             if (innerKeys.Length == 0)
@@ -29,40 +26,13 @@
                 return string.Empty;
             }
 
-            var key = string.Join(this.Config.Separator, innerKeys);
+            var key = string.Join(Separator, innerKeys);
             return this.FindValue(key);
         }
 
         public string FindValue(string key)
         {
             return this.map.ContainsKey(key) ? this.map[key] : string.Empty;
-        }
-
-        public YNode Parse(Tokenizer tokenizer)
-        {
-            foreach (var strategy in this.Strategies)
-            {
-                var node = strategy.Parse(tokenizer, this);
-                if (node != null)
-                {
-                    return node;
-                }
-            }
-
-            return null;
-        }
-
-        protected virtual IList<IYParserStrategy> GetStrategies()
-        {
-            return new List<IYParserStrategy>
-            {
-                new YAliasParserStrategy(),
-                new YAnchorParserStrategy(),
-                new YMappingParserStrategy(),
-                new YScalarParserStrategy(),
-                new YSequenceParserStrategy(),
-                new YDocumentParserStrategy()
-            };
         }
 
         private IDictionary<string, string> ParseContent(string content)
@@ -95,7 +65,7 @@
         {
             switch (node)
             {
-                case YMapping.YKeyValuePair keyValuePair:
+                case YKeyValuePair keyValuePair:
                     string key = null;
                     try
                     {
@@ -106,7 +76,7 @@
                         Debug.WriteLine(ex.Message);
                     }
 
-                    key = string.IsNullOrEmpty(prefix) ? key : string.Concat(prefix, this.Config.Separator, key);
+                    key = string.IsNullOrEmpty(prefix) ? key : string.Concat(prefix, Separator, key);
                     if (keyValuePair.Value is YScalar valueScalar)
                     {
                         dict[key] = valueScalar.Value;
@@ -114,6 +84,17 @@
                     else
                     {
                         this.TryParseContentItems(keyValuePair.Value, ref dict, key);
+                    }
+
+                    break;
+                case YSequence sequence:
+                    // TODO: need suppoer Enum fields
+                    foreach (var sequenceChild in sequence.Children)
+                    {
+                        if (sequenceChild is YScalar yScalar)
+                        {
+                            dict[string.Concat(prefix, Separator, yScalar.Value)] = yScalar.Value;
+                        }
                     }
 
                     break;
@@ -134,31 +115,36 @@
                     break;
             }
         }
-        
+
         private IEnumerable<YNode> GetNodes(string content)
         {
             using (var scanner = new Scanner(content))
             {
                 using (var tokenizer = new Tokenizer(scanner))
                 {
-                    while (tokenizer.Current.Kind != TokenKind.Eof && this.Parse(tokenizer) is YNode node)
+                    var nodeTranslator = new YNodeTranslator();
+                    while (tokenizer.Current.Value.Kind != TokenKind.Eof)
                     {
+                        var node = nodeTranslator.Translate(tokenizer);
+                        if (node is YAnchor)
+                        {
+                            continue;
+                        }
+
                         yield return node;
                     }
 
-                    if (tokenizer.Current.Kind != TokenKind.Eof)
+                    while (tokenizer.Current.Value.Kind == TokenKind.Unindent)
+                    {
+                        tokenizer.MoveNext();
+                    }
+
+                    if (tokenizer.Current.Value.Kind != TokenKind.Eof)
                     {
                         throw ParseException.UnexpectedToken(tokenizer, TokenKind.Eof);
                     }
                 }
             }
-        }
-
-        public class YParserConfig
-        {
-            public string Separator { get; set; } = ".";
-
-            public static YParserConfig Default => new YParserConfig();
         }
     }
 }
