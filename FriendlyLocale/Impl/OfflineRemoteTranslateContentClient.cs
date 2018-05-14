@@ -28,14 +28,14 @@
             this.platformResourceFileManager ??
             (this.platformResourceFileManager = this.PlatformComponentsFactory.CreateResourceFileManager());
 
-        private Task<string> GetOfflineContent()
+        private async Task<string[]> GetOfflineContent()
         {
             var resourceFolder = this.offlineContentConfig.ResourceFolder;
             var fileName = this.offlineContentConfig.FileName;
             if (this.offlineContentConfig.IsLocal)
             {
                 var filePath = Utils.GetFilePath(resourceFolder, fileName);
-                return this.PlatformResourceFileManager.GetFile(filePath);
+                return new[] {await this.PlatformResourceFileManager.GetFile(filePath)};
             }
 
             var assemblyFilePath = string.IsNullOrEmpty(resourceFolder) ? fileName : $".{resourceFolder}.{fileName}";
@@ -45,11 +45,11 @@
             {
                 throw new FriendlyTranslateException();
             }
-            
-            return AssemblyTranslateContentClient.GetAssemblyContent(assembly, assemblyResource);
+
+            return new[] {await AssemblyTranslateContentClient.GetAssemblyContent(assembly, assemblyResource)};
         }
 
-        public override Task<string> GetContent(ILocale locale, IProgress<float> progressAction,
+        public override Task<string[]> GetContent(ILocale locale, IProgress<float> progressAction,
             CancellationToken ct = default(CancellationToken))
         {
             return locale is OfflineLocale ? this.GetOfflineContent() : base.GetContent(locale, progressAction, ct);

@@ -255,5 +255,23 @@ parent:
             Assert.AreEqual("Test3 Value", valueTest3);
             Assert.AreEqual("Test4 Value", valueTest4);
         }
+
+        [Test]
+        public void Check_MultipleContents()
+        {
+            const string localeContent1 = @"
+parent:
+    child: value1
+";
+            
+            const string localeContent2 = @"
+parent:
+    child: value2
+";
+            
+            var parser = new YParser(localeContent1, localeContent2);
+            var value = parser.FindValue("parent.child");
+            Assert.AreEqual("value2", value);
+        }
     }
 }

@@ -1,8 +1,12 @@
 ﻿namespace FriendlyLocale.Tests.Units
 {
+    using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Configs;
+    using FriendlyLocale.Impl;
+    using FriendlyLocale.Parser;
     using NUnit.Framework;
 
     [TestFixture]
@@ -93,6 +97,65 @@
             var value = friendlyLocale.Translate("ViewModel.Locale");
 
             // Assert
+            Assert.AreEqual("en", value);
+        }
+        
+        [Test]
+        public async Task Translate_SomeWordsWithArgs()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.Translate("ViewModel.Test1.Test2.TestArgs", 5);
+
+            // Assert
+            Assert.AreEqual("Any 5", value);
+        }
+        
+        [Test]
+        public async Task Translate_SomeWordsWithArgs_WithoutArgs()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.Translate("ViewModel.Locale", 5);
+
+            // Assert
+            Assert.AreEqual("en", value);
+        }
+        
+        [Test]
+        public async Task Translate_MultipleAssemblies()
+        {
+            // Arrange
+            var hostAssembly = this.GetType().Assembly;
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {hostAssembly, hostAssembly})
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.Translate("ViewModel.Locale");
+
+            // Assert
+            Assert.AreEqual(7, (friendlyLocale as I18NProvider)?.Parser?.map.Count);
             Assert.AreEqual("en", value);
         }
     }

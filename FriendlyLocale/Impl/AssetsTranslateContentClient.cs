@@ -30,13 +30,13 @@
             return Utils.ConvertFilesToLocales(supportedResources);
         }
 
-        public async Task<string> GetContent(ILocale locale, IProgress<float> progress, CancellationToken ct)
+        public async Task<string[]> GetContent(ILocale locale, IProgress<float> progress, CancellationToken ct)
         {
             progress?.Report(0);
             var filePath = Utils.GetFilePath(this.contentConfig.ResourceFolder, locale.Source);
             var result = await this.platformResourceFileManager.GetFile(filePath);
             progress?.Report(100);
-            return result;
+            return new[] {result};
         }
     }
 }

@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
     using FriendlyLocale.Configs;
     using FriendlyLocale.Interfaces;
+    using FriendlyLocale.Models;
 
     internal class AssemblyTranslateContentClient : ITranslateContentClient
     {
@@ -21,22 +22,47 @@
 
         public IList<ILocale> GetLocales()
         {
-            var localeResources = this.contentConfig.HostAssembly
-                .GetManifestResourceNames()
-                .Where(x => x.Contains($".{this.contentConfig.ResourceFolder}."));
+            var locales = new List<AssemblyLocale>();
+            foreach (var hostAssembly in this.contentConfig.HostAssemblies)
+            {
+                var localeResources = hostAssembly
+                    .GetManifestResourceNames()
+                    .Where(x => x.Contains($".{this.contentConfig.ResourceFolder}."));
+                var supportedResources = localeResources.Where(name => name.EndsWith(I18NProvider.YamlFileExtension)).ToList();
+                foreach (var supportedResource in supportedResources)
+                {
+                    var localeName = Utils.GetLocaleFromFile(supportedResource);
+                    var existsLocale = locales.FirstOrDefault(x => x.Key == localeName);
+                    if (existsLocale == null)
+                    {
+                        locales.Add(new AssemblyLocale(new List<Assembly> {hostAssembly}, localeName, supportedResource));
+                    }
+                    else
+                    {
+                        existsLocale.HostAssemblies.Add(hostAssembly);
+                    }
+                }
+            }
 
-            var supportedResources =
-                localeResources.Where(name => name.EndsWith(I18NProvider.YamlFileExtension)).ToList();
-
-            return Utils.ConvertFilesToLocales(supportedResources);
+            return locales.ToList<ILocale>();
         }
 
-        public async Task<string> GetContent(ILocale locale, IProgress<float> progress, CancellationToken ct)
+        public async Task<string[]> GetContent(ILocale locale, IProgress<float> progress, CancellationToken ct)
         {
+            if (!(locale is AssemblyLocale assemblyLocale))
+            {
+                throw new NotSupportedException($"Unsupported type: {locale}. Please use AssemblyLocale for AssemblyContent");
+            }
+
             progress?.Report(0);
-            var result = await GetAssemblyContent(this.contentConfig.HostAssembly, locale.Source);
+            var contents = new List<string>();
+            foreach (var hostAssembly in assemblyLocale.HostAssemblies)
+            {
+                contents.Add(await GetAssemblyContent(hostAssembly, locale.Source));
+            }
+
             progress?.Report(100);
-            return result;
+            return contents.ToArray();
         }
 
         public static Task<string> GetAssemblyContent(Assembly assembly, string source)
