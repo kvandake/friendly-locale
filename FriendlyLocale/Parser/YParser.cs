@@ -1,19 +1,23 @@
 ﻿namespace FriendlyLocale.Parser
 {
+    using System.Diagnostics;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using FriendlyLocale.Parser.Core;
+    using FriendlyLocale.Parser.Exceptions;
+    using FriendlyLocale.Parser.Nodes;
+    using YNodeTranslator = FriendlyLocale.Parser.Translators.YNodeTranslator;
 
-    public class YParser
+    internal class YParser
     {
-        public YParser(YParserConfig config, params string[] contents)
+        private const string Separator = ".";
+
+        public YParser(params string[] contents)
         {
-            this.Config = config ?? new YParserConfig();
             this.map = this.ParseContent(contents);
         }
 
         private IDictionary<string, string> map { get; }
-
-        public YParserConfig Config { get; }
 
         public string FindValue(params string[] innerKeys)
         {
@@ -22,13 +26,25 @@
                 return string.Empty;
             }
 
-            var key = string.Join(this.Config.Separator, innerKeys);
+            var key = string.Join(Separator, innerKeys);
             return this.FindValue(key);
         }
 
         public string FindValue(string key)
         {
             return this.map.ContainsKey(key) ? this.map[key] : string.Empty;
+        }
+
+        private IDictionary<string, string> ParseContent(string content)
+        {
+            var dict = new Dictionary<string, string>();
+            var nodes = this.GetNodes(content);
+            foreach (var node in nodes)
+            {
+                this.TryParseContentItems(node, ref dict);
+            }
+
+            return new ReadOnlyDictionary<string, string>(dict);
         }
 
         private IDictionary<string, string> ParseContent(string[] contents)
@@ -45,31 +61,22 @@
             return new ReadOnlyDictionary<string, string>(dict);
         }
 
-        private IDictionary<string, string> ParseContent(string content)
-        {
-            using (var scanner = new Scanner(content))
-            {
-                using (var tokinizer = new Tokenizer(scanner))
-                {
-                    var document = YMapping.Parse(tokinizer);
-                    var dict = new Dictionary<string, string>();
-                    foreach (var docItem in document)
-                    {
-                        this.TryParseContentItems(docItem, ref dict);
-                    }
-
-                    return new ReadOnlyDictionary<string, string>(dict);
-                }
-            }
-        }
-
         private void TryParseContentItems(YNode node, ref Dictionary<string, string> dict, string prefix = null)
         {
             switch (node)
             {
                 case YKeyValuePair keyValuePair:
-                    var key = (string) keyValuePair.Key;
-                    key = string.IsNullOrEmpty(prefix) ? key : string.Concat(prefix, this.Config.Separator, key);
+                    string key = null;
+                    try
+                    {
+                        key = (string) keyValuePair.Key;
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+
+                    key = string.IsNullOrEmpty(prefix) ? key : string.Concat(prefix, Separator, key);
                     if (keyValuePair.Value is YScalar valueScalar)
                     {
                         dict[key] = valueScalar.Value;
@@ -77,6 +84,17 @@
                     else
                     {
                         this.TryParseContentItems(keyValuePair.Value, ref dict, key);
+                    }
+
+                    break;
+                case YSequence sequence:
+                    // TODO: need suppoer Enum fields
+                    foreach (var sequenceChild in sequence.Children)
+                    {
+                        if (sequenceChild is YScalar yScalar)
+                        {
+                            dict[string.Concat(prefix, Separator, yScalar.Value)] = yScalar.Value;
+                        }
                     }
 
                     break;
@@ -98,11 +116,35 @@
             }
         }
 
-        public class YParserConfig
+        private IEnumerable<YNode> GetNodes(string content)
         {
-            public string Separator { get; set; } = ".";
+            using (var scanner = new Scanner(content))
+            {
+                using (var tokenizer = new Tokenizer(scanner))
+                {
+                    var nodeTranslator = new YNodeTranslator();
+                    while (tokenizer.Current.Value.Kind != TokenKind.Eof)
+                    {
+                        var node = nodeTranslator.Translate(tokenizer);
+                        if (node is YAnchor)
+                        {
+                            continue;
+                        }
 
-            public static YParserConfig Default => new YParserConfig();
+                        yield return node;
+                    }
+
+                    while (tokenizer.Current.Value.Kind == TokenKind.Unindent)
+                    {
+                        tokenizer.MoveNext();
+                    }
+
+                    if (tokenizer.Current.Value.Kind != TokenKind.Eof)
+                    {
+                        throw ParseException.UnexpectedToken(tokenizer, TokenKind.Eof);
+                    }
+                }
+            }
         }
     }
 }

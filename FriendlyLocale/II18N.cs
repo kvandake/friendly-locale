@@ -10,9 +10,12 @@
         ILocale CurrentLocale { get; }
 
         string FallbackLocale { get; set; }
+        
         string Translate(string[] innerKeys, string fallback = default(string));
 
         string Translate(string key, string fallback = default(string));
+
+        string Translate(string key, params object[] args);
 
         IEnumerable<ILocale> GetAvailableLocales();
 

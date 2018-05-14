@@ -1,4 +1,4 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -13,7 +13,7 @@
         {
             this.Initialize(content);
         }
-
+        
         internal List<TModel> Children => this.children ?? (this.children = new List<TModel>());
 
         protected abstract YNode FirstNode { get; }

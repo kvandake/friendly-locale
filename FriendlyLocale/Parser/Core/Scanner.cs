@@ -1,4 +1,4 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Core
 {
     using System;
     using System.Collections.Generic;
@@ -46,11 +46,6 @@
         public void PushIndent(int spaces)
         {
             this.indents.Push(spaces);
-        }
-
-        public int PopIndent()
-        {
-            return this.indents.Pop();
         }
 
         public bool IsCurrent(params char[] any)

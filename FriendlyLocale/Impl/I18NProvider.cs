@@ -35,6 +35,12 @@
             return this.Parser?.FindValue(key) ?? fallback;
         }
 
+        public string Translate(string key, params object[] args)
+        {
+            var content = this.Parser?.FindValue(key);
+            return string.IsNullOrWhiteSpace(content) ? string.Empty : string.Format(content, args);
+        }
+
         public ILocale CurrentLocale { get; private set; }
 
         public IEnumerable<ILocale> GetAvailableLocales()
@@ -52,7 +58,7 @@
             try
             {
                 var content = await this.ContentClient.GetContent(locale, progress).ConfigureAwait(false);
-                this.Parser = new YParser(YParser.YParserConfig.Default, content);
+                this.Parser = new YParser(content);
                 this.CurrentLocale = locale;
             }
             catch (Exception)

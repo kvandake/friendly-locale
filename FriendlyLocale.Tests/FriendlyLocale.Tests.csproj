@@ -43,6 +43,8 @@
     <Compile Include="Units\RemoteLocaleTests.cs" />
     <Compile Include="Units\AssetsTranslateContentClientTests.cs" />
     <Compile Include="Units\RemoteTranslateContentClientTests.cs" />
+    <Compile Include="Units\TokenizerTests.cs" />
+    <Compile Include="Units\YParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FriendlyLocale\FriendlyLocale.csproj">

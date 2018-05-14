@@ -1,75 +1,17 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
     using System.Collections.Generic;
     using System.Linq;
 
     internal class YSequence : YCollection<YNode>
     {
-        private YSequence(YNodeStyle style, params YNode[] content)
+        internal YSequence(YNodeStyle style, params YNode[] content)
             : base(style, content)
         {
         }
 
         protected override YNode FirstNode => this.Children.FirstOrDefault();
         protected override YNode LastNode => this.Children.LastOrDefault();
-
-        internal new static YSequence Parse(Tokenizer tokenizer)
-        {
-            switch (tokenizer.Current.Kind)
-            {
-                case TokenKind.Indent when tokenizer.Next.Value.Kind == TokenKind.SequenceValue:
-                {
-                    var items = new List<YNode>();
-
-                    tokenizer.MoveNext();
-
-                    while (tokenizer.Current.Kind != TokenKind.Unindent && tokenizer.Current.Kind != TokenKind.Eof)
-                    {
-                        if (tokenizer.Current.Kind != TokenKind.SequenceValue)
-                        {
-                            throw ParseException.UnexpectedToken(tokenizer, TokenKind.SequenceValue);
-                        }
-
-                        tokenizer.MoveNext();
-                        items.Add(YNode.Parse(tokenizer));
-                    }
-
-                    if (tokenizer.Current.Kind == TokenKind.Unindent)
-                    {
-                        tokenizer.MoveNext();
-                    }
-
-                    return new YSequence(YNodeStyle.Block, items.ToArray());
-                }
-                case TokenKind.SequenceBegin:
-                {
-                    var items = new List<YNode>();
-
-                    tokenizer.MoveNext();
-
-                    do
-                    {
-                        if (tokenizer.Current.Kind == TokenKind.SequenceEnd)
-                        {
-                            break;
-                        }
-
-                        items.Add(YNode.Parse(tokenizer));
-                    } while (tokenizer.Current.Kind == TokenKind.ItemDelimiter && tokenizer.MoveNext());
-
-                    if (tokenizer.Current.Kind != TokenKind.SequenceEnd)
-                    {
-                        throw ParseException.UnexpectedToken(tokenizer, TokenKind.SequenceEnd);
-                    }
-
-                    tokenizer.MoveNext();
-
-                    return new YSequence(YNodeStyle.Flow, items.ToArray());
-                }
-                default:
-                    return null;
-            }
-        }
 
         public override void Add(params YNode[] content)
         {

@@ -1,6 +1,5 @@
-﻿namespace FriendlyLocale.Parser
+﻿namespace FriendlyLocale.Parser.Nodes
 {
-    using System;
     using System.Globalization;
     using System.Text.RegularExpressions;
 
@@ -21,51 +20,6 @@
         }
 
         public string Value { get; }
-
-        internal new static YNode Parse(Tokenizer tokenizer)
-        {
-            switch (tokenizer.Current.Kind)
-            {
-                case TokenKind.StringDouble:
-                case TokenKind.StringSingle:
-                case TokenKind.StringFolding:
-                case TokenKind.StringLiteral:
-                {
-                    var kind = tokenizer.Current.Kind;
-                    var value = tokenizer.Current.Value;
-
-                    if (tokenizer.Current.Kind == TokenKind.StringDouble)
-                    {
-                        value = UnescapeString(value);
-                    }
-
-                    tokenizer.MoveNext();
-
-                    var style = kind == TokenKind.StringFolding || kind == TokenKind.StringLiteral ? YNodeStyle.Block : YNodeStyle.Flow;
-                    return new YScalar(value, style);
-                }
-                case TokenKind.StringPlain:
-                {
-                    var value = tokenizer.Current.Value;
-
-                    tokenizer.MoveNext();
-
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        return new YScalar(null);
-                    }
-
-                    if (value.Equals("null", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return new YScalar(null);
-                    }
-
-                    return new YScalar(value);
-                }
-                default:
-                    return null;
-            }
-        }
 
         public static string EscapeString(string str)
         {
