@@ -12,5 +12,10 @@
         }
 
         public IList<Assembly> HostAssemblies { get; }
+
+        public string GetSourcePath(Assembly hostAssembly, string folderName)
+        {
+            return $"{hostAssembly.GetName().Name}.{folderName}.{this.Source}";
+        }
     }
 }
