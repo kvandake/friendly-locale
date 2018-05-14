@@ -17,7 +17,7 @@
             this.map = this.ParseContent(contents);
         }
 
-        private IDictionary<string, string> map { get; }
+        internal IDictionary<string, string> map { get; }
 
         public string FindValue(params string[] innerKeys)
         {

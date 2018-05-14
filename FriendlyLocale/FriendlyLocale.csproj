@@ -36,6 +36,7 @@
     <Compile Include="Impl\I18NProvider.cs" />
     <Compile Include="Interfaces\ILocale.cs" />
     <Compile Include="Interfaces\IPlatformComponentsFactory.cs" />
+    <Compile Include="Models\AssemblyLocale.cs" />
     <Compile Include="Models\Locale.cs" />
     <Compile Include="Models\OfflineLocale.cs" />
     <Compile Include="Models\RemoteLocale.cs" />

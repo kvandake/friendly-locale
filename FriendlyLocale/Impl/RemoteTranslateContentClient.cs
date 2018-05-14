@@ -31,7 +31,7 @@
             => this.platformHttpClientManager ??
                (this.platformHttpClientManager = this.PlatformComponentsFactory.CreateHttpClientManager());
 
-        public virtual async Task<string> GetContent(ILocale locale, IProgress<float> progressAction,
+        public virtual async Task<string[]> GetContent(ILocale locale, IProgress<float> progressAction,
             CancellationToken ct = default(CancellationToken))
         {
             var remoteLocale = (RemoteLocale) locale;
@@ -50,7 +50,7 @@
                 remoteLocale.Downloaded = true;
             }
 
-            return content;
+            return new[] {content};
         }
 
         public virtual IList<ILocale> GetLocales()
@@ -72,7 +72,7 @@
             return locales;
         }
 
-        public Task<string> GetContent(ILocale locale, CancellationToken ct)
+        public Task<string[]> GetContent(ILocale locale, CancellationToken ct)
         {
             return this.GetContent(locale, null, ct);
         }

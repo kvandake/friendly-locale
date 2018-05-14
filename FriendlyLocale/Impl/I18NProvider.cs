@@ -21,7 +21,7 @@
 
         private ITranslateContentClient ContentClient { get; }
 
-        private YParser Parser { get; set; }
+        internal YParser Parser { get; set; }
 
         public string FallbackLocale { get; set; }
 
