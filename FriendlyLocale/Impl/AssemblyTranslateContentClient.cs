@@ -32,10 +32,12 @@
                 foreach (var supportedResource in supportedResources)
                 {
                     var localeName = Utils.GetLocaleFromFile(supportedResource);
+                    // берем название файла с расширением
+                    var localeSource = string.Concat(localeName, Path.GetExtension(supportedResource));
                     var existsLocale = locales.FirstOrDefault(x => x.Key == localeName);
                     if (existsLocale == null)
                     {
-                        locales.Add(new AssemblyLocale(new List<Assembly> {hostAssembly}, localeName, supportedResource));
+                        locales.Add(new AssemblyLocale(new List<Assembly> {hostAssembly}, localeName, localeSource));
                     }
                     else
                     {
@@ -58,7 +60,9 @@
             var contents = new List<string>();
             foreach (var hostAssembly in assemblyLocale.HostAssemblies)
             {
-                contents.Add(await GetAssemblyContent(hostAssembly, locale.Source));
+                contents.Add(await GetAssemblyContent(
+                    hostAssembly,
+                    assemblyLocale.GetSourcePath(hostAssembly, this.contentConfig.ResourceFolder)));
             }
 
             progress?.Report(100);
