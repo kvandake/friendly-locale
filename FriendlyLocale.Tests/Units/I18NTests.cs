@@ -7,6 +7,8 @@
     using Configs;
     using FriendlyLocale.Impl;
     using FriendlyLocale.Parser;
+    using FriendlyLocale.Tests.Locales;
+    using FriendlyLocale.Tests.Models;
     using NUnit.Framework;
 
     [TestFixture]
@@ -39,7 +41,6 @@
         public async Task Translate_SomeWords()
         {
             // Arrange
-
             I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
             {
                 ResourceFolder = "Locales"
@@ -120,6 +121,44 @@
         }
         
         [Test]
+        public async Task Translate_SomeObject()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.TranslateNamingFormat("ViewModel.Test1.Test2.TestObject", new {foo = "foo value", bar = "bar value"});
+
+            // Assert
+            Assert.AreEqual("Any foo value\nAny bar value", value);
+        }
+        
+        [Test]
+        public async Task Translate_WithoutSomeObject()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.TranslateNamingFormat("ViewModel.Test1.Test2.TestObject", new {foo = "foo value"});
+
+            // Assert
+            Assert.AreEqual("Any foo value\nAny {bar}", value);
+        }
+        
+        [Test]
         public async Task Translate_SomeWordsWithArgs_WithoutArgs()
         {
             // Arrange
@@ -143,7 +182,7 @@
         {
             // Arrange
             var hostAssembly = this.GetType().Assembly;
-            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {hostAssembly, hostAssembly})
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {hostAssembly, typeof(LocaleTests).Assembly})
             {
                 ResourceFolder = "Locales"
             });
@@ -155,8 +194,41 @@
             var value = friendlyLocale.Translate("ViewModel.Locale");
 
             // Assert
-            Assert.AreEqual(7, (friendlyLocale as I18NProvider)?.Parser?.map.Count);
             Assert.AreEqual("en", value);
+        }
+
+        [Test]
+        public async Task Translate_Enum()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var valueCatEn = friendlyLocale.TranslateEnum(Animal.Cat);
+            var valueDogEn = friendlyLocale.TranslateEnum(Animal.Dog);
+            var valueMonkeyEn = friendlyLocale.TranslateEnum(Animal.Monkey);
+            
+            await friendlyLocale.ChangeLocale("ru");
+            
+            var valueCatRu = friendlyLocale.TranslateEnum(Animal.Cat);
+            var valueDogRu = friendlyLocale.TranslateEnum(Animal.Dog);
+            var valueMonkeyRu = friendlyLocale.TranslateEnum(Animal.Monkey);
+
+            // Assert
+            Assert.AreEqual("Cat Value", valueCatEn);
+            Assert.AreEqual("Dog Value", valueDogEn);
+            Assert.AreEqual("Monkey Value", valueMonkeyEn);
+            
+            Assert.AreEqual("Кот Значение", valueCatRu);
+            Assert.AreEqual("Собака Значение", valueDogRu);
+            Assert.AreEqual("Макака Значение", valueMonkeyRu);
         }
     }
 }

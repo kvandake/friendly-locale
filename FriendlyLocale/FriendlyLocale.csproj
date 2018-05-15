@@ -33,6 +33,7 @@
     <Compile Include="Configs\AssetsContentConfig.cs" />
     <Compile Include="Configs\OfflineContentConfig.cs" />
     <Compile Include="Configs\RemoteContentConfig.cs" />
+    <Compile Include="Extensions\OskarFormatter.cs" />
     <Compile Include="Impl\I18NProvider.cs" />
     <Compile Include="Interfaces\ILocale.cs" />
     <Compile Include="Interfaces\IPlatformComponentsFactory.cs" />
