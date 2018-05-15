@@ -214,6 +214,43 @@ Get the value:
 var aliasDescription = I18N.Instance.Translate("FirstViewModel.AliasDescription");
 ```
 
+## Support Enum types, Naming formats
+
+### Support for enum types
+```yaml
+# Animal Enum
+Animal:
+  Dog: Dog Value
+  Cat: Cat Value
+  Monkey: Monkey Value
+  
+FirstViewModel:
+  Title: First Title
+```
+Get the value:
+```cs
+public enum Animal
+{
+    Dog,
+    Cat,
+    Monkey
+}
+
+var valueCat = I18N.Instance.TranslateEnum(Animal.Cat); // Cat Value
+```
+
+### Support naming formats
+```yaml
+ViewModel:
+  Title: Title {foo}, {bar}
+```
+Get the value:
+```cs
+var nf = new {foo = "Foo Value", bar = "Bar Value"};
+// value = Title Foo Value, Bar Value
+var value = I18N.Instance.TranslateNamingFormat("ViewModel.Title", nf);
+```
+
 ## Roadmap
 - Add more tests;
 - Automatic change of values when changing localization;
