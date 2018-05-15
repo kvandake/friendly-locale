@@ -42,7 +42,7 @@
             return string.IsNullOrWhiteSpace(content) ? string.Empty : string.Format(content, args);
         }
 
-        public string TranslateObject(string key, object injectionObject)
+        public string TranslateNamingFormat(string key, object injectionObject)
         {
             var content = this.Parser?.FindValue(key);
             return content?.InjectNamedFormats(injectionObject);

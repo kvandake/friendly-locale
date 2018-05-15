@@ -47,7 +47,7 @@
         /// <param name="key"></param>
         /// <param name="injectionObject"></param>
         /// <returns></returns>
-        string TranslateObject(string key, object injectionObject);
+        string TranslateNamingFormat(string key, object injectionObject);
 
         /// <summary>
         ///     Translate some enum.

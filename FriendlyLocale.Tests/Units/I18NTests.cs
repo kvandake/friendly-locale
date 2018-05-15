@@ -133,7 +133,7 @@
             await friendlyLocale.ChangeLocale("en");
 
             // Act
-            var value = friendlyLocale.TranslateObject("ViewModel.Test1.Test2.TestObject", new {foo = "foo value", bar = "bar value"});
+            var value = friendlyLocale.TranslateNamingFormat("ViewModel.Test1.Test2.TestObject", new {foo = "foo value", bar = "bar value"});
 
             // Assert
             Assert.AreEqual("Any foo value\nAny bar value", value);
@@ -152,7 +152,7 @@
             await friendlyLocale.ChangeLocale("en");
 
             // Act
-            var value = friendlyLocale.TranslateObject("ViewModel.Test1.Test2.TestObject", new {foo = "foo value"});
+            var value = friendlyLocale.TranslateNamingFormat("ViewModel.Test1.Test2.TestObject", new {foo = "foo value"});
 
             // Assert
             Assert.AreEqual("Any foo value\nAny {bar}", value);
