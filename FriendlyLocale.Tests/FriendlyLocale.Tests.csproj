@@ -41,6 +41,7 @@
     <Compile Include="Units\AssemblyTranslateContentClientTests.cs" />
     <Compile Include="Units\I18NTests.cs" />
     <Compile Include="Units\OfflineRemoteTranslateContentClientTests.cs" />
+    <Compile Include="Units\OskarFormatterTests.cs" />
     <Compile Include="Units\RemoteLocaleTests.cs" />
     <Compile Include="Units\AssetsTranslateContentClientTests.cs" />
     <Compile Include="Units\RemoteTranslateContentClientTests.cs" />

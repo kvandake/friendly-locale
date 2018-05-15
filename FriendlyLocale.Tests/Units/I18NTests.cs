@@ -121,6 +121,44 @@
         }
         
         [Test]
+        public async Task Translate_SomeObject()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.TranslateObject("ViewModel.Test1.Test2.TestObject", new {foo = "foo value", bar = "bar value"});
+
+            // Assert
+            Assert.AreEqual("Any foo value\nAny bar value", value);
+        }
+        
+        [Test]
+        public async Task Translate_WithoutSomeObject()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act
+            var value = friendlyLocale.TranslateObject("ViewModel.Test1.Test2.TestObject", new {foo = "foo value"});
+
+            // Assert
+            Assert.AreEqual("Any foo value\nAny {bar}", value);
+        }
+        
+        [Test]
         public async Task Translate_SomeWordsWithArgs_WithoutArgs()
         {
             // Arrange

@@ -34,12 +34,20 @@
         string Translate(string key, string fallback = default(string));
 
         /// <summary>
-        ///     Translate some key.
+        ///     Translate some key with string format args. {0}, {1} ...
         /// </summary>
         /// <param name="key">localization key.</param>
         /// <param name="args">args for "string.Format"></param>
         /// <returns>localization value.</returns>
         string Translate(string key, params object[] args);
+        
+        /// <summary>
+        ///      Translate some key with string naming formats. {name1}, {foo}, {bar} ...
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="injectionObject"></param>
+        /// <returns></returns>
+        string TranslateObject(string key, object injectionObject);
 
         /// <summary>
         ///     Translate some enum.

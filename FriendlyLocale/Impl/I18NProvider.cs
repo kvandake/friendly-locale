@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FriendlyLocale.Extensions;
     using FriendlyLocale.Interfaces;
     using FriendlyLocale.Parser;
 
@@ -39,6 +40,12 @@
         {
             var content = this.Parser?.FindValue(key);
             return string.IsNullOrWhiteSpace(content) ? string.Empty : string.Format(content, args);
+        }
+
+        public string TranslateObject(string key, object injectionObject)
+        {
+            var content = this.Parser?.FindValue(key);
+            return content?.InjectNamedFormats(injectionObject);
         }
 
         public string TranslateEnum<TEnum>(TEnum enumValue, string fallback)
