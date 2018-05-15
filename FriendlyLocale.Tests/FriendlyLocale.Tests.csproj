@@ -47,6 +47,10 @@
     <Compile Include="Units\YParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FriendlyLocale.Tests.Locales\FriendlyLocale.Tests.Locales.csproj">
+      <Project>{2a59bf92-02ec-4e82-ad50-362f10b0c155}</Project>
+      <Name>FriendlyLocale.Tests.Locales</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FriendlyLocale\FriendlyLocale.csproj">
       <Project>{B89A061D-08BD-455D-A75F-F00C385091AC}</Project>
       <Name>FriendlyLocale</Name>

@@ -7,6 +7,7 @@
     using Configs;
     using FriendlyLocale.Impl;
     using FriendlyLocale.Parser;
+    using FriendlyLocale.Tests.Locales;
     using NUnit.Framework;
 
     [TestFixture]
@@ -143,7 +144,7 @@
         {
             // Arrange
             var hostAssembly = this.GetType().Assembly;
-            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {hostAssembly, hostAssembly})
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {hostAssembly, typeof(LocaleTests).Assembly})
             {
                 ResourceFolder = "Locales"
             });
