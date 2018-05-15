@@ -12,3 +12,9 @@ ViewModel:
     Test2:
       Test3: Test3
       TestArgs: Any {0}
+      
+# Animal Enum
+Animal:
+  Dog: Dog Value
+  Cat: Cat Value
+  Monkey: Monkey Value

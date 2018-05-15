@@ -36,6 +36,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Animal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\AssemblyTranslateContentClientTests.cs" />
     <Compile Include="Units\I18NTests.cs" />

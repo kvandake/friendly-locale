@@ -49,6 +49,20 @@ parent:
             var value = parser.FindValue("parent.children.child_3");
             Assert.NotNull(value);
         }
+        
+        [Test]
+        public void Check_RootSequence()
+        {
+            const string localeContent = @"
+sequence:
+    - child_1
+    - child_2
+    - child_3
+";
+            var parser = new YParser(localeContent);
+            var value = parser.FindValue("sequence.child_3");
+            Assert.NotNull(value);    
+        }
 
         [Test]
         public void Check_Mapping()

@@ -41,6 +41,13 @@
             return string.IsNullOrWhiteSpace(content) ? string.Empty : string.Format(content, args);
         }
 
+        public string TranslateEnum<TEnum>(TEnum enumValue, string fallback)
+        {
+            var type = typeof(TEnum);
+            var enumName = Enum.GetName(type, enumValue);
+            return this.Translate($"{type.Name}.{enumName}", fallback);
+        }
+
         public ILocale CurrentLocale { get; private set; }
 
         public IEnumerable<ILocale> GetAvailableLocales()
