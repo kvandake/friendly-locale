@@ -6,6 +6,7 @@ namespace FriendlyLocale.Tests.Units
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+    using FriendlyLocale.Exceptions;
     using FriendlyLocale.Models;
     using global::FriendlyLocale.Configs;
     using global::FriendlyLocale.Impl;
@@ -38,6 +39,26 @@ namespace FriendlyLocale.Tests.Units
 
             // Assert
             Assert.IsNotEmpty(content);
+        }
+
+        [Test]
+        public async Task NullSource_ThrowNotFound()
+        {
+            // Arrange & Act & Assert
+            Assert.ThrowsAsync<FriendlyTranslateException>(async () =>
+            {
+                await AssemblyTranslateContentClient.GetAssemblyContent(this.GetType().Assembly, null);
+            });
+        }
+
+        [Test]
+        public async Task NotFoundEmbeddedResource_ThrowNotFound()
+        {
+            // Arrange & Act & Assert
+            Assert.ThrowsAsync<FriendlyTranslateException>(async () =>
+            {
+                await AssemblyTranslateContentClient.GetAssemblyContent(this.GetType().Assembly, "bad.yaml");
+            });
         }
 
         [Test]

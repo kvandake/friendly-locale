@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using FriendlyLocale.Exceptions;
     using FriendlyLocale.Extensions;
     using FriendlyLocale.Interfaces;
     using FriendlyLocale.Parser;
@@ -21,6 +22,8 @@
         private IList<ILocale> Locales { get; }
 
         private ITranslateContentClient ContentClient { get; }
+
+        private bool HasLogger => this.ContentClient.ContentConfig.Logger != null;
 
         internal YParser Parser { get; set; }
 
@@ -71,9 +74,19 @@
         {
             try
             {
+                if (locale == null)
+                {
+                    throw FriendlyTranslateException.NotFoundLocale();
+                }
+
                 var content = await this.ContentClient.GetContent(locale, progress).ConfigureAwait(false);
-                this.Parser = new YParser(content);
+                this.Parser = new YParser(content)
+                {
+                    ThrowWhenKeyNotFound = this.ContentClient.ContentConfig.ThrowWhenKeyNotFound
+                };
+                
                 this.CurrentLocale = locale;
+                this.LogTranslations();
             }
             catch (Exception)
             {
@@ -95,6 +108,27 @@
         public Task ChangeLocale(string locale, IProgress<float> progress)
         {
             return this.ChangeLocale(this.GetLocale(locale), progress);
+        }
+
+        private void LogTranslations()
+        {
+            if (!this.HasLogger)
+            {
+                return;
+            }
+
+            this.Log("========== I18N translations ==========");
+            foreach (var item in this.Parser.map)
+            {
+                this.Log($"{item.Key} = {item.Value}");
+            }
+
+            this.Log("====== I18N end of translations =======");
+        }
+
+        private void Log(string trace)
+        {
+            this.ContentClient.ContentConfig.Logger?.Invoke(trace);
         }
     }
 }

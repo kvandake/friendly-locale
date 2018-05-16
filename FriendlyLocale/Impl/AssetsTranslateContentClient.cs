@@ -19,6 +19,8 @@
             this.platformResourceFileManager = platformComponentsFactory.CreateResourceFileManager();
             this.contentConfig = contentConfig;
         }
+        
+        public IContentConfig ContentConfig => this.contentConfig;
 
         public IList<ILocale> GetLocales()
         {

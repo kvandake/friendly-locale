@@ -32,6 +32,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BadLocales\en.yaml">
+      <LogicalName>bad.yaml</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Locales\en.yaml" />
     <EmbeddedResource Include="Locales\ru.yaml" />
   </ItemGroup>

@@ -20,6 +20,8 @@
             this.PlatformComponentsFactory = platformComponentsFactory;
             this.platformCacheFileManager = platformComponentsFactory.CreateCacheFileManager();
         }
+        
+        public IContentConfig ContentConfig => this.contentConfig;
 
         protected IPlatformComponentsFactory PlatformComponentsFactory { get; }
 

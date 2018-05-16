@@ -5,6 +5,7 @@
     using System.Reflection;
     using System.Threading.Tasks;
     using Configs;
+    using FriendlyLocale.Exceptions;
     using FriendlyLocale.Impl;
     using FriendlyLocale.Parser;
     using FriendlyLocale.Tests.Locales;
@@ -14,6 +15,32 @@
     [TestFixture]
     public class I18NTests
     {
+        [Test]
+        public async Task NotExistsLocale_ThrowNotFound()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales"
+            });
+
+            // Act & Assert
+            Assert.ThrowsAsync<FriendlyTranslateException>(async () => { await I18N.Instance.ChangeLocale("fr"); });
+        }
+        
+        [Test]
+        public async Task NotExistsEmbeddedResource_ThrowNotFound()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {typeof(LocaleTests).Assembly})
+            {
+                ResourceFolder = "BadLocales"
+            });
+
+            // Act & Assert
+            Assert.ThrowsAsync<FriendlyTranslateException>(async () => { await I18N.Instance.ChangeLocale("en"); });
+        }
+
         [Test]
         public async Task Chech_OfflineLocale()
         {
@@ -55,6 +82,46 @@
 
             // Assert
             Assert.AreEqual("en", value);
+        }
+
+        [Test]
+        public async Task Check_ThrowWhenKeyNotFound()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales",
+                ThrowWhenKeyNotFound = true
+            });
+
+            var friendlyLocale = I18N.Instance;
+
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act & friendlyLocale.Translate("ViewModel.Locale.BadKey");
+            Assert.Throws<KeyNotFoundException>(() => { friendlyLocale.Translate("ViewModel.Locale.BadKey"); });
+        }
+        
+        [Test]
+        public async Task Check_Logger()
+        {
+            // Arrange
+            var traces = new List<string>();
+            I18N.Initialize(new AssemblyContentConfig(this.GetType().Assembly)
+            {
+                ResourceFolder = "Locales",
+                ThrowWhenKeyNotFound = false,
+                Logger = trace =>
+                {
+                    traces.Add(trace);
+                }
+            });
+
+            var friendlyLocale = I18N.Instance;
+            await friendlyLocale.ChangeLocale("en");
+
+            // Act & friendlyLocale.Translate("ViewModel.Locale.BadKey");
+            Assert.GreaterOrEqual(traces.Count, 0);
         }
 
         [Test]

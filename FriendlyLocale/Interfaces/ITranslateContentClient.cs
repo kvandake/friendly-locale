@@ -10,5 +10,7 @@
         Task<string[]> GetContent(ILocale locale, IProgress<float> progress = null, CancellationToken ct = default(CancellationToken));
 
         IList<ILocale> GetLocales();
+        
+        IContentConfig ContentConfig { get; }
     }
 }

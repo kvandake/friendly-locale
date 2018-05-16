@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class RemoteContentConfig
+    public class RemoteContentConfig : BaseContentConfig
     {
         private IDictionary<string, string> locales;
 

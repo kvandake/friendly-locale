@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    public class AssemblyContentConfig
+    public class AssemblyContentConfig : BaseContentConfig
     {
         public AssemblyContentConfig(Assembly hostAssembly)
         {
