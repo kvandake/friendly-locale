@@ -16,6 +16,8 @@
         {
             this.map = this.ParseContent(contents);
         }
+        
+        public bool ThrowWhenKeyNotFound { get; set; }
 
         internal IDictionary<string, string> map { get; }
 
@@ -32,7 +34,14 @@
 
         public string FindValue(string key)
         {
-            return this.map.ContainsKey(key) ? this.map[key] : string.Empty;
+            if (this.map.ContainsKey(key))
+            {
+                return this.map[key];
+            }
+
+            return this.ThrowWhenKeyNotFound
+                ? throw new KeyNotFoundException($"Key <{key}> not found in the current locale")
+                : string.Empty;
         }
 
         private IDictionary<string, string> ParseContent(string content)

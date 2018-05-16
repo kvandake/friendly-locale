@@ -63,9 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Locales\en.yaml" />
-    <EmbeddedResource Include="Locales\ru.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Locales\ru.yaml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

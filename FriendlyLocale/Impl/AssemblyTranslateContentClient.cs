@@ -8,6 +8,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using FriendlyLocale.Configs;
+    using FriendlyLocale.Exceptions;
     using FriendlyLocale.Interfaces;
     using FriendlyLocale.Models;
 
@@ -19,6 +20,8 @@
         {
             this.contentConfig = contentConfig;
         }
+        
+        public IContentConfig ContentConfig => this.contentConfig;
 
         public IList<ILocale> GetLocales()
         {
@@ -71,8 +74,18 @@
 
         public static Task<string> GetAssemblyContent(Assembly assembly, string source)
         {
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new FriendlyTranslateException($"Source is null in this assembly:{assembly}");
+            }
+
             using (var stream = assembly.GetManifestResourceStream(source))
             {
+                if (stream == null)
+                {
+                    throw new FriendlyTranslateException($"Not found the locale for the source <{source}> in assembly:{assembly.FullName}");
+                }
+
                 using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEndAsync();

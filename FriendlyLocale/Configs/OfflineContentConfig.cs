@@ -2,7 +2,7 @@
 {
     using System.Reflection;
 
-    public class OfflineContentConfig
+    public class OfflineContentConfig : BaseContentConfig
     {
         internal Assembly Assembly { get; set; }
 

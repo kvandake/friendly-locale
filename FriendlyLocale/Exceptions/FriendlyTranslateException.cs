@@ -20,5 +20,11 @@
         {
             return new FriendlyTranslateException($"{configName} is required");
         }
+        
+        public static FriendlyTranslateException NotFoundLocale()
+        {
+            return new FriendlyTranslateException("Not found locale");
+        }
+
     }
 }
