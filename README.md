@@ -132,6 +132,11 @@ var remoteConfig = new RemoteContentConfig
 FriendlyLocale.I18N.Initialize(remoteConfig, offlineConfig);
 ```
 
+### Additional settings
+All config files includes this properties:
+* **ThrowWhenKeyNotFound** - Optional: Throw an exception when keys are not found (recommended only for debugging);
+* **Logger** - Action to output traces.
+
 ## Using
 Change Locale
 ```cs
