@@ -2,22 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using FriendlyLocale.Exceptions;
     using FriendlyLocale.Extensions;
     using FriendlyLocale.Interfaces;
     using FriendlyLocale.Parser;
 
-    public class I18NProvider : II18N
+    public sealed class I18NProvider : II18N
     {
         public static string YamlFileExtension = "yaml";
+        private ILocale currentLocale;
 
         public I18NProvider(ITranslateContentClient contentClient)
         {
             this.ContentClient = contentClient;
             this.Locales = this.ContentClient.GetLocales();
         }
+        
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private IList<ILocale> Locales { get; }
 
@@ -28,6 +33,8 @@
         internal YParser Parser { get; set; }
 
         public string FallbackLocale { get; set; }
+
+        public string this[string key] => this.Translate(key);
 
         public string Translate(string[] innerKeys, string fallback)
         {
@@ -58,7 +65,15 @@
             return this.Translate($"{type.Name}.{enumName}", fallback);
         }
 
-        public ILocale CurrentLocale { get; private set; }
+        public ILocale CurrentLocale
+        {
+            get => this.currentLocale;
+            private set
+            {
+                this.currentLocale = value;
+                this.OnPropertyChanged();
+            }
+        }
 
         public IEnumerable<ILocale> GetAvailableLocales()
         {
@@ -79,12 +94,18 @@
                     throw FriendlyTranslateException.NotFoundLocale();
                 }
 
+                if (locale == this.CurrentLocale)
+                {
+                    this.Log($"{locale.DisplayName} is the current language.");
+                    return;
+                }
+
                 var content = await this.ContentClient.GetContent(locale, progress).ConfigureAwait(false);
                 this.Parser = new YParser(content)
                 {
                     ThrowWhenKeyNotFound = this.ContentClient.ContentConfig.ThrowWhenKeyNotFound
                 };
-                
+
                 this.CurrentLocale = locale;
                 this.LogTranslations();
             }
@@ -101,6 +122,7 @@
                     throw;
                 }
 
+                this.Log($"Try loading fallback locale: {fallbackLocale}");
                 await this.ChangeLocale(fallbackLocale, progress);
             }
         }
@@ -117,18 +139,23 @@
                 return;
             }
 
-            this.Log("========== I18N translations ==========");
+            this.Log("----------- I18N translations -----------");
             foreach (var item in this.Parser.map)
             {
                 this.Log($"{item.Key} = {item.Value}");
             }
 
-            this.Log("====== I18N end of translations =======");
+            this.Log("----------- I18N end of translations -----------");
         }
 
         private void Log(string trace)
         {
             this.ContentClient.ContentConfig.Logger?.Invoke(trace);
+        }
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

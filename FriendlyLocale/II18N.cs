@@ -2,10 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Threading.Tasks;
     using FriendlyLocale.Interfaces;
 
-    public interface II18N
+    public interface II18N : INotifyPropertyChanged
     {
         /// <summary>
         ///  Current locale.
@@ -16,6 +17,12 @@
         ///  Fallback locale.
         /// </summary>
         string FallbackLocale { get; set; }
+        
+        /// <summary>
+        ///     Translate some key.
+        /// </summary>
+        /// <param name="key">localization key.</param>
+        string this[string key] { get; }
         
         /// <summary>
         ///     Translate some key.
