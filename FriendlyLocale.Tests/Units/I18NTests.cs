@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Configs;
     using FriendlyLocale.Exceptions;
+    using FriendlyLocale.Extensions;
     using FriendlyLocale.Impl;
     using FriendlyLocale.Parser;
     using FriendlyLocale.Tests.Locales;
@@ -27,6 +28,23 @@
             // Act & Assert
             Assert.ThrowsAsync<FriendlyTranslateException>(async () => { await I18N.Instance.ChangeLocale("fr"); });
         }
+
+        [Test]
+        public async Task GetAvailableCultures()
+        {
+            // Arrange & Act & Assert
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {typeof(LocaleTests).Assembly})
+            {
+                ResourceFolder = "Locales"
+            });
+            Assert.GreaterOrEqual(I18N.Instance.GetAvailableCultures().Count, 0);
+            
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {typeof(LocaleTests).Assembly})
+            {
+                ResourceFolder = "FullLocales"
+            }); 
+            Assert.GreaterOrEqual(I18N.Instance.GetAvailableCultures().Count, 0);
+        }
         
         [Test]
         public async Task NotExistsEmbeddedResource_ThrowNotFound()
@@ -39,6 +57,20 @@
 
             // Act & Assert
             Assert.ThrowsAsync<FriendlyTranslateException>(async () => { await I18N.Instance.ChangeLocale("en"); });
+        }
+
+        [Test]
+        public async Task Detect_FullCultureName()
+        {
+            // Arrange
+            I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {typeof(LocaleTests).Assembly})
+            {
+                ResourceFolder = "FullLocales"
+            });
+
+            // Act & Assert
+            await I18N.Instance.ChangeLocale("en-US");
+            await I18N.Instance.ChangeLocale("ru-RU");
         }
 
         [Test]

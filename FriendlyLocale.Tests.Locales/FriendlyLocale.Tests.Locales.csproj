@@ -37,6 +37,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Locales\en.yaml" />
     <EmbeddedResource Include="Locales\ru.yaml" />
+    <EmbeddedResource Include="FullLocales\en-US.yaml" />
+    <EmbeddedResource Include="FullLocales\ru-RU.yaml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

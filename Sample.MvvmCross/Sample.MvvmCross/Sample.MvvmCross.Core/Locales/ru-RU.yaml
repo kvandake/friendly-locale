@@ -1,0 +1,7 @@
+FirstViewModel:
+  Title: ПерваяВьюМодель
+  Label: |
+    Привет русский язык!
+    Это работает!!!
+  Buttons:
+    ChangeLocale: Поменять язык

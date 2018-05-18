@@ -1,0 +1,7 @@
+FirstViewModel:
+  Title: FirstViewModel
+  Label: |
+    Hello English language!
+    Its work!!!
+  Buttons:
+    ChangeLocale: Change Locale!
