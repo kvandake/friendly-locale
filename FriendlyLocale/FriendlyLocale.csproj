@@ -34,6 +34,7 @@
     <Compile Include="Configs\BaseContentConfig.cs" />
     <Compile Include="Configs\OfflineContentConfig.cs" />
     <Compile Include="Configs\RemoteContentConfig.cs" />
+    <Compile Include="Extensions\I18NExtensions.cs" />
     <Compile Include="Extensions\OskarFormatter.cs" />
     <Compile Include="Impl\I18NProvider.cs" />
     <Compile Include="Interfaces\IContentConfig.cs" />
