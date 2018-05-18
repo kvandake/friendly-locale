@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
     using Configs;
@@ -37,13 +38,13 @@
             {
                 ResourceFolder = "Locales"
             });
-            Assert.GreaterOrEqual(I18N.Instance.GetAvailableCultures().Count, 0);
+            Assert.GreaterOrEqual(I18N.Instance.GetAvailableCultures().Count(), 0);
             
             I18N.Initialize(new AssemblyContentConfig(new List<Assembly> {typeof(LocaleTests).Assembly})
             {
                 ResourceFolder = "FullLocales"
-            }); 
-            Assert.GreaterOrEqual(I18N.Instance.GetAvailableCultures().Count, 0);
+            });
+            Assert.GreaterOrEqual(I18N.Instance.GetAvailableCultures().Count(), 0);
         }
         
         [Test]
