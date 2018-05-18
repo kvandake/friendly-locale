@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>FriendlyLocale</id>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <title>Yaml.I18N.Net: Friendly Locale for Xamarin(Beta)</title>
     <authors>kvandake</authors>
     <owners>kvandake</owners>
